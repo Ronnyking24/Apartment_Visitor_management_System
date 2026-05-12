@@ -78,7 +78,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
-        }
+        },
+        "github-protocols": ["https"],
+        "process-timeout": 0
     },
     "minimum-stability": "stable",
     "prefer-stable": true
