@@ -10,12 +10,12 @@ class ApartmentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Apartment::withCount('tenants');
+        $query = Apartment::withCount('residents');
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('apartment_number', 'like', "%{$search}%")
+                                  $q->where('apartment_number', 'like', "%{$search}%")
                   ->orWhere('block_name', 'like', "%{$search}%");
             });
         }
@@ -52,7 +52,7 @@ class ApartmentController extends Controller
 
     public function show(Apartment $apartment)
     {
-        $apartment->load(['tenants.user', 'tenants.visits.visitor']);
+        $apartment->load(['residents.user', 'residents.visits.visitor']);
         return view('admin.apartments.show', compact('apartment'));
     }
 

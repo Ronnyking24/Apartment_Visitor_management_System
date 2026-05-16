@@ -11,12 +11,12 @@ return new class extends Migration
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
             $table->foreignId('visitor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tenant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('resident_id')->constrained('residents')->onDelete('cascade');
             $table->string('purpose');
             $table->timestamp('check_in_time')->nullable();
             $table->timestamp('check_out_time')->nullable();
             $table->enum('status', ['pending', 'active', 'completed', 'rejected'])->default('pending');
-            $table->boolean('approved_by_tenant')->default(false);
+            $table->boolean('approved_by_resident')->default(false);
             $table->text('notes')->nullable();
             $table->timestamps();
         });

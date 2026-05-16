@@ -11,10 +11,10 @@ class VisitController extends Controller
 {
     public function index(Request $request)
     {
-        $tenant = Auth::user()->tenant;
+        $tenant = Auth::user()->resident;
 
         $query = Visit::with('visitor')
-            ->where('tenant_id', $tenant->id);
+            ->where('resident_id', $tenant->id);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -43,43 +43,54 @@ class VisitController extends Controller
 
     public function show(Visit $visit)
     {
-        $tenant = Auth::user()->tenant;
+        $tenant = Auth::user()->resident;
 
-        if ($visit->tenant_id !== $tenant->id) {
+        if ($visit->resident_id !== $tenant->id) {
             abort(403);
         }
 
-        $visit->load(['visitor', 'tenant.user', 'tenant.apartment']);
+        $visit->load(['visitor', 'resident.user', 'resident.apartment']);
 
         return view('tenant.visits.show', compact('visit'));
     }
 
     public function approve(Visit $visit)
     {
-        $tenant = Auth::user()->tenant;
+        $tenant = Auth::user()->resident;
 
-        if ($visit->tenant_id !== $tenant->id) {
+        if ($visit->resident_id !== $tenant->id) {
             abort(403);
         }
 
-        $visit->update([
-            'approved_by_tenant' => true,
-            'status'             => 'active',
-        ]);
+        if ($visit->status !== 'pending') {
+            return back()->with('error', 'Only pending visits can be approved.');
+        }
+
+        $data = [
+            'approved_by_resident' => true,
+            'check_in_time'        => now(),
+            'status'               => 'active',
+        ];
+
+        $visit->update($data);
 
         return back()->with('success', 'Visit approved successfully.');
     }
 
     public function reject(Visit $visit)
     {
-        $tenant = Auth::user()->tenant;
+        $tenant = Auth::user()->resident;
 
-        if ($visit->tenant_id !== $tenant->id) {
+        if ($visit->resident_id !== $tenant->id) {
             abort(403);
         }
 
+        if ($visit->status !== 'pending') {
+            return back()->with('error', 'Only pending visits can be rejected.');
+        }
+
         $visit->update([
-            'approved_by_tenant' => false,
+            'approved_by_resident' => false,
             'status'             => 'rejected',
         ]);
 
@@ -88,10 +99,10 @@ class VisitController extends Controller
 
     public function activeVisits()
     {
-        $tenant = Auth::user()->tenant;
+        $tenant = Auth::user()->resident;
 
         $visits = Visit::with('visitor')
-            ->where('tenant_id', $tenant->id)
+            ->where('resident_id', $tenant->id)
             ->where('status', 'active')
             ->latest('check_in_time')
             ->paginate(15);

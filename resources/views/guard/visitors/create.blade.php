@@ -7,114 +7,117 @@
 /* ── REGISTER PAGE ── */
 .ci-wrap {
     display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 22px;
+    grid-template-columns: 1fr 420px;
+    gap: 24px;
     align-items: start;
 }
-@media(max-width:991px){ .ci-wrap { grid-template-columns: 1fr; } }
+@media(max-width:1100px){ .ci-wrap { grid-template-columns: 1fr; } }
 
 /* Page header bar */
 .ci-header {
     background: linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);
-    border-radius: 14px;
-    padding: 20px 26px;
+    border-radius: 16px;
+    padding: 22px 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 22px;
+    gap: 20px;
+    margin-bottom: 24px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 24px rgba(30,58,138,.2);
 }
 .ci-header::after {
     content:'';
     position:absolute;
     right:-30px;top:-30px;
-    width:180px;height:180px;
+    width:220px;height:220px;
     background:radial-gradient(circle,rgba(99,102,241,.2) 0%,transparent 70%);
     pointer-events:none;
 }
-.ci-header-title { font-size:18px;font-weight:800;color:#fff;margin:0 0 2px; }
-.ci-header-sub   { font-size:12px;color:rgba(255,255,255,.45);margin:0; }
-.ci-header-time  { font-size:22px;font-weight:800;color:#fff;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-0.5px; }
-.ci-header-date  { font-size:11px;color:rgba(255,255,255,.4);text-align:right; }
+.ci-header-title { font-size:20px;font-weight:800;color:#fff;margin:0 0 3px; }
+.ci-header-sub   { font-size:13px;color:rgba(255,255,255,.5);margin:0; }
+.ci-header-time  { font-size:28px;font-weight:800;color:#fff;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-0.5px; }
+.ci-header-date  { font-size:12px;color:rgba(255,255,255,.45);text-align:right;margin-top:2px; }
 
 /* Main form card */
 .ci-card {
     background:#fff;
     border-radius:16px;
-    border:1px solid rgba(0,0,0,.06);
-    box-shadow:0 2px 12px rgba(0,0,0,.06);
+    border:1px solid #e8ecf1;
+    box-shadow:0 4px 16px rgba(0,0,0,.08);
     overflow:hidden;
 }
 .ci-section-head {
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:18px 24px 14px;
+    gap:12px;
+    padding:20px 26px 16px;
     border-bottom:1px solid #f1f5f9;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
 }
 .ci-section-icon {
-    width:34px;height:34px;
-    border-radius:9px;
+    width:38px;height:38px;
+    border-radius:10px;
     display:flex;align-items:center;justify-content:center;
-    font-size:14px;flex-shrink:0;
+    font-size:16px;flex-shrink:0;
 }
-.ci-section-label { font-size:14px;font-weight:700;color:#0f172a;margin:0; }
-.ci-section-sub   { font-size:11.5px;color:#94a3b8;margin:2px 0 0; }
-.ci-body { padding:22px 24px; }
+.ci-section-label { font-size:15px;font-weight:700;color:#0f172a;margin:0; }
+.ci-section-sub   { font-size:12px;color:#94a3b8;margin:3px 0 0; }
+.ci-body { padding:26px; }
 
 /* Photo drop zone */
 .ci-photo-zone {
-    border:2px dashed #bfdbfe;
-    border-radius:14px;
-    background:#f8faff;
-    padding:28px 20px;
+    border:2.5px dashed #93c5fd;
+    border-radius:16px;
+    background:#f0f7ff;
+    padding:36px 24px;
     text-align:center;
     cursor:pointer;
-    transition:all .2s;
+    transition:all .25s;
     position:relative;
     overflow:hidden;
-    margin-bottom:20px;
+    margin-bottom:24px;
 }
-.ci-photo-zone:hover { border-color:#3b82f6;background:#eff6ff; }
-.ci-photo-zone.has-photo { border-style:solid;border-color:#3b82f6;background:#eff6ff;padding:12px; }
-.ci-photo-icon { font-size:32px;color:#93c5fd;margin-bottom:10px; }
-.ci-photo-label { font-size:13.5px;font-weight:700;color:#3b82f6;margin-bottom:4px; }
-.ci-photo-hint  { font-size:11.5px;color:#94a3b8; }
+.ci-photo-zone:hover { border-color:#3b82f6;background:#eff6ff;transform:translateY(-1px); }
+.ci-photo-zone.has-photo { border-style:solid;border-color:#3b82f6;background:#eff6ff;padding:16px; }
+.ci-photo-icon { font-size:40px;color:#3b82f6;margin-bottom:12px; }
+.ci-photo-label { font-size:14px;font-weight:700;color:#3b82f6;margin-bottom:6px; }
+.ci-photo-hint  { font-size:12px;color:#94a3b8; }
 .ci-photo-preview {
-    width:90px;height:90px;
-    border-radius:12px;
+    width:110px;height:110px;
+    border-radius:14px;
     object-fit:cover;
     border:3px solid #3b82f6;
     display:none;
-    margin:0 auto 8px;
+    margin:0 auto 10px;
 }
 .ci-photo-zone.has-photo .ci-photo-preview { display:block; }
 .ci-photo-zone.has-photo .ci-photo-placeholder { display:none; }
 
 /* Form fields */
 .ci-label {
-    font-size:12.5px;font-weight:600;color:#374151;
-    display:flex;align-items:center;gap:5px;
-    margin-bottom:6px;
+    font-size:13px;font-weight:600;color:#374151;
+    display:flex;align-items:center;gap:6px;
+    margin-bottom:8px;
 }
-.ci-label .req { color:#ef4444;font-size:13px; }
+.ci-label .req { color:#ef4444;font-size:14px; }
 .ci-input {
     width:100%;
-    padding:11px 14px;
+    padding:13px 16px;
     border:1.5px solid #e2e8f0;
-    border-radius:10px;
-    font-size:13.5px;color:#0f172a;
+    border-radius:11px;
+    font-size:14px;color:#0f172a;
     background:#fff;
-    transition:border-color .2s,box-shadow .2s;
+    transition:border-color .2s,box-shadow .2s,background .2s;
     outline:none;
     font-family:inherit;
 }
-.ci-input:focus { border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12); }
+.ci-input:focus { border-color:#3b82f6;box-shadow:0 0 0 4px rgba(59,130,246,.12);background:#fafbff; }
 .ci-input.is-invalid { border-color:#ef4444; }
-.ci-input.is-invalid:focus { box-shadow:0 0 0 3px rgba(239,68,68,.12); }
-.ci-feedback { font-size:11.5px;color:#ef4444;margin-top:4px; }
+.ci-input.is-invalid:focus { box-shadow:0 0 0 4px rgba(239,68,68,.12); }
+.ci-feedback { font-size:12px;color:#ef4444;margin-top:5px;display:flex;align-items:center;gap:4px; }
+.ci-feedback::before { content:'⚠';font-weight:700; }
 
 /* Purpose cards */
 .purpose-grid {
@@ -152,7 +155,7 @@
 }
 .purpose-card.selected .purpose-card-text { color:#1d4ed8; }
 
-/* Tenant select styled */
+/* Resident select styled */
 .ci-tenant-select {
     position:relative;
 }
@@ -287,7 +290,7 @@
 <div class="ci-header">
     <div>
         <p class="ci-header-title"><i class="fas fa-shield-halved me-2" style="color:#93c5fd;"></i>Visitor Check-In Terminal</p>
-        <p class="ci-header-sub">Gate Security &mdash; Apartment Visitors Management</p>
+        <p class="ci-header-sub">Gate Security<br>Apartment Visitors Management</p>
     </div>
     <div>
         <div class="ci-header-time" id="ciClock">--:--</div>
@@ -376,24 +379,24 @@
             </div>
             <div class="ci-body">
 
-                {{-- Tenant select --}}
+                {{-- Resident select --}}
                 <div style="margin-bottom:20px;">
-                    <label class="ci-label">Tenant Being Visited <span class="req">*</span></label>
+                    <label class="ci-label">Resident Being Visited <span class="req">*</span></label>
                     <div class="ci-tenant-select">
-                        <select name="tenant_id" id="ciTenant"
-                            class="ci-input @error('tenant_id') is-invalid @enderror"
+                        <select name="resident_id" id="ciTenant"
+                            class="ci-input @error('resident_id') is-invalid @enderror"
                             required onchange="updatePreview()">
-                            <option value="">Select tenant…</option>
+                            <option value="">Select resident…</option>
                             @foreach($tenants as $tenant)
                                 <option value="{{ $tenant->id }}"
-                                    data-apt="{{ $tenant->apartment->apartment_number ?? 'N/A' }}"
-                                    {{ old('tenant_id')==$tenant->id?'selected':'' }}>
-                                    {{ $tenant->user->name }} — Apt {{ $tenant->apartment->apartment_number ?? 'N/A' }}
+                                    data-apt="{{ $tenant->apartment_display ?? 'N/A' }}"
+                                    {{ old('resident_id')==$tenant->id?'selected':'' }}>
+                                    {{ $tenant->user->name }} — Apartment {{ $tenant->apartment_display ?? 'N/A' }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
-                    @error('tenant_id')<p class="ci-feedback">{{ $message }}</p>@enderror
+                    @error('resident_id')<p class="ci-feedback">{{ $message }}</p>@enderror
                 </div>
 
                 {{-- Purpose cards --}}
@@ -416,8 +419,8 @@
                     <div class="purpose-card {{ old('purpose')==$p['value'] ? 'selected' : '' }}"
                          data-value="{{ $p['value'] }}"
                          onclick="selectPurpose(this)">
-                        <div class="purpose-card-icon" style="background:{{ $p['bg'] }};">
-                            <i class="fas {{ $p['icon'] }}" style="color:{{ $p['color'] }};"></i>
+                        <div class="purpose-card-icon" data-bg="{{ $p['bg'] }}">
+                            <i class="fas {{ $p['icon'] }}" data-color="{{ $p['color'] }}"></i>
                         </div>
                         <div class="purpose-card-text">{{ $p['value'] }}</div>
                     </div>
@@ -441,6 +444,21 @@
     {{-- ── RIGHT: SIDEBAR ── --}}
     <div class="ci-sidebar">
 
+@push('scripts')
+<script>
+    // Apply background/colors for purpose cards (avoid inline blade CSS in attributes)
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.purpose-card-icon').forEach(function(el){
+            var bg = el.getAttribute('data-bg'); if (bg) el.style.background = bg;
+            var icon = el.querySelector('i');
+            if (icon) {
+                var c = icon.getAttribute('data-color'); if (c) icon.style.color = c;
+            }
+        });
+    });
+</script>
+@endpush
+
         {{-- Live visitor pass preview --}}
         <div class="ci-pass">
             <div class="ci-pass-header">
@@ -461,7 +479,7 @@
                 </div>
                 <div class="ci-pass-row">
                     <i class="fas fa-building"></i>
-                    <span id="passApt" class="ci-pass-row-empty">Tenant not selected</span>
+                    <span id="passApt" class="ci-pass-row-empty">Resident not selected</span>
                 </div>
                 <div class="ci-pass-row">
                     <i class="fas fa-tag"></i>
@@ -600,10 +618,10 @@ function updatePreview() {
     if(nid) { nidEl.textContent = nid; nidEl.className='ci-pass-row-val'; }
     else     { nidEl.textContent='National ID not entered'; nidEl.className='ci-pass-row-empty'; }
 
-    /* Tenant / Apt */
+    /* Resident / Room */
     const aptEl = document.getElementById('passApt');
     if(opt && opt.value) { aptEl.textContent = opt.text; aptEl.className='ci-pass-row-val'; }
-    else                 { aptEl.textContent='Tenant not selected'; aptEl.className='ci-pass-row-empty'; }
+    else                 { aptEl.textContent='Resident not selected'; aptEl.className='ci-pass-row-empty'; }
 }
 </script>
 @endpush

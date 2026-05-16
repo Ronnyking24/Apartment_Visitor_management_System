@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Guard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tenant;
+use App\Models\Resident;
 use App\Models\Visit;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
@@ -32,7 +32,7 @@ class VisitorController extends Controller
 
     public function create()
     {
-        $tenants = Tenant::with(['user', 'apartment'])->get();
+        $tenants = Resident::with(['user', 'apartment'])->get();
         return view('guard.visitors.create', compact('tenants'));
     }
 
@@ -43,7 +43,7 @@ class VisitorController extends Controller
             'phone_number' => 'nullable|string|max:20',
             'national_id'  => 'nullable|string|max:50',
             'photo'        => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'tenant_id'    => 'required|exists:tenants,id',
+            'resident_id'  => 'required|exists:residents,id',
             'purpose'      => 'required|string|max:500',
         ]);
 
@@ -53,18 +53,18 @@ class VisitorController extends Controller
             $visitor = Visitor::where('national_id', $validated['national_id'])->first();
         }
 
-        // Block check-in if this visitor already has an active visit anywhere
+        // Block duplicate requests if this visitor already has an active or pending visit anywhere
         if ($visitor) {
             $activeVisit = Visit::where('visitor_id', $visitor->id)
-                ->where('status', 'active')
-                ->with('tenant.apartment')
+                ->whereIn('status', ['pending', 'active'])
+                ->with('resident.apartment')
                 ->first();
 
             if ($activeVisit) {
-                $apt = $activeVisit->tenant->apartment->apartment_number ?? 'unknown apartment';
+                $apt = $activeVisit->resident->apartment->apartment_number ?? 'unknown apartment';
                 return back()
                     ->withInput()
-                    ->withErrors(['national_id' => "This visitor is already checked in at Apt {$apt}. Check them out first before registering a new visit."]);
+                    ->withErrors(['national_id' => "This visitor is already checked in at Apartment {$apt}. Check them out first before registering a new visit."]);
             }
         }
 
@@ -83,27 +83,28 @@ class VisitorController extends Controller
         }
 
         $visit = Visit::create([
-            'visitor_id'        => $visitor->id,
-            'tenant_id'         => $validated['tenant_id'],
-            'purpose'           => $validated['purpose'],
-            'check_in_time'     => now(),
-            'status'            => 'active',
-            'approved_by_tenant' => false,
+            'visitor_id'         => $visitor->id,
+            'resident_id'        => $validated['resident_id'],
+            'purpose'            => $validated['purpose'],
+            'check_in_time'      => null,
+            'check_out_time'     => null,
+            'status'             => 'pending',
+            'approved_by_resident' => false,
         ]);
 
         return redirect()->route('guard.visits.show', $visit)
-            ->with('success', 'Visitor checked in successfully.');
+            ->with('success', 'Visitor registration submitted. Waiting for resident approval.');
     }
 
     public function show(Visitor $visitor)
     {
-        $visitor->load(['visits.tenant.user', 'visits.tenant.apartment']);
+        $visitor->load(['visits.resident.user', 'visits.resident.apartment']);
         return view('guard.visitors.show', compact('visitor'));
     }
 
     public function activeVisitors()
     {
-        $visits = Visit::with(['visitor', 'tenant.user', 'tenant.apartment'])
+        $visits = Visit::with(['visitor', 'resident.user', 'resident.apartment'])
             ->where('status', 'active')
             ->latest('check_in_time')
             ->paginate(15);
@@ -113,7 +114,7 @@ class VisitorController extends Controller
 
     public function logs(Request $request)
     {
-        $query = Visit::with(['visitor', 'tenant.user', 'tenant.apartment'])
+        $query = Visit::with(['visitor', 'resident.user', 'resident.apartment'])
             ->whereDate('check_in_time', today());
 
         if ($request->filled('search')) {
@@ -131,7 +132,7 @@ class VisitorController extends Controller
 
     public function exportLogs(Request $request)
     {
-        $query = Visit::with(['visitor', 'tenant.user', 'tenant.apartment'])
+        $query = Visit::with(['visitor', 'resident.user', 'resident.apartment'])
             ->whereDate('check_in_time', today());
 
         if ($request->filled('search')) {

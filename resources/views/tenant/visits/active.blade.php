@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-/* ── TENANT ACTIVE VISITORS ── */
+/* ── RESIDENT ACTIVE VISITORS ── */
 
 /* Header banner */
 .tav-header {

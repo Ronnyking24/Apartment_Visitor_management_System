@@ -106,7 +106,7 @@
                 </td>
                 <td>{{ $visit->visitor->national_id ?? '—' }}</td>
                 <td>{{ $visit->tenant->user->name ?? '—' }}</td>
-                <td><span class="apt">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</span></td>
+                <td><span class="apt">{{ $visit->tenant->apartment_display ?? '—' }}</span></td>
                 <td>{{ $visit->purpose }}</td>
                 <td style="font-weight:700;">{{ $visit->check_in_time?->format('H:i') ?? '—' }}</td>
                 <td style="font-weight:700;">{{ $visit->check_out_time?->format('H:i') ?? '—' }}</td>

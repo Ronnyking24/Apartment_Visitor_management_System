@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
-use App\Models\Tenant;
+use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +13,7 @@ class TenantController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tenant::with(['user', 'apartment']);
+        $query = Resident::with(['user', 'apartment']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -53,10 +53,10 @@ class TenantController extends Controller
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role'     => 'tenant',
+            'role'     => 'resident',
         ]);
 
-        Tenant::create([
+        Resident::create([
             'user_id'      => $user->id,
             'apartment_id' => $validated['apartment_id'],
             'phone'        => $validated['phone'] ?? null,
@@ -67,23 +67,23 @@ class TenantController extends Controller
         Apartment::find($validated['apartment_id'])->update(['status' => 'occupied']);
 
         return redirect()->route('admin.tenants.index')
-            ->with('success', 'Tenant created successfully.');
+            ->with('success', 'Resident created successfully.');
     }
 
-    public function show(Tenant $tenant)
+    public function show(Resident $tenant)
     {
         $tenant->load(['user', 'apartment', 'visits.visitor']);
         return view('admin.tenants.show', compact('tenant'));
     }
 
-    public function edit(Tenant $tenant)
+    public function edit(Resident $tenant)
     {
         $apartments = Apartment::all();
         $tenant->load('user');
         return view('admin.tenants.edit', compact('tenant', 'apartments'));
     }
 
-    public function update(Request $request, Tenant $tenant)
+    public function update(Request $request, Resident $tenant)
     {
         $validated = $request->validate([
             'name'         => 'required|string|max:255',
@@ -118,7 +118,7 @@ class TenantController extends Controller
         if ($oldApartmentId !== $newApartmentId) {
             // Free the previously assigned apartment if no other tenant occupies it
             if ($oldApartmentId) {
-                $stillOccupied = Tenant::where('apartment_id', $oldApartmentId)
+                $stillOccupied = Resident::where('apartment_id', $oldApartmentId)
                     ->where('id', '!=', $tenant->id)
                     ->exists();
                 if (!$stillOccupied) {
@@ -132,19 +132,18 @@ class TenantController extends Controller
         }
 
         return redirect()->route('admin.tenants.index')
-            ->with('success', 'Tenant updated successfully.');
+            ->with('success', 'Resident updated successfully.');
     }
 
-    public function destroy(Tenant $tenant)
+    public function destroy(Resident $tenant)
     {
         $apartmentId = $tenant->apartment_id;
         $tenant->user->delete();
-
-        if (Tenant::where('apartment_id', $apartmentId)->count() === 0) {
+        if (Resident::where('apartment_id', $apartmentId)->count() === 0) {
             Apartment::find($apartmentId)?->update(['status' => 'vacant']);
         }
 
         return redirect()->route('admin.tenants.index')
-            ->with('success', 'Tenant deleted successfully.');
+            ->with('success', 'Resident deleted successfully.');
     }
 }

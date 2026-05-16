@@ -213,80 +213,28 @@
     </div>
 </div>
 
-{{-- ACTION-REQUIRED PANEL --}}
+{{-- ACTION-REQUIRED PANEL (compact notifications only) --}}
 @php $totalActions = $unassignedTenants->count() + $pendingGuards->count(); @endphp
 @if($totalActions > 0)
 <div class="adm-action-panel">
     <div class="adm-action-header">
         <div class="adm-action-title">
             <span class="pulse-dot"></span>
-            <i class="fas fa-triangle-exclamation" style="font-size:14px;"></i>
-            Action Required
+            <i class="fas fa-bell" style="font-size:14px;"></i>
+            Notifications
         </div>
-        <span class="adm-action-badge">{{ $totalActions }} {{ Str::plural('item', $totalActions) }} need attention</span>
+        <span class="adm-action-badge">{{ $totalActions }}</span>
     </div>
-    <div class="adm-action-body">
-
-        {{-- Unassigned tenants --}}
-        @if($unassignedTenants->count() > 0)
-        <div class="adm-action-section-title">
-            <i class="fas fa-house-circle-exclamation"></i>
-            {{ $unassignedTenants->count() }} {{ Str::plural('Tenant', $unassignedTenants->count()) }} Without Apartment
+    <div class="adm-action-body" style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;">
+        <div style="color:#92400e;font-weight:700;">You have {{ $totalActions }} pending {{ Str::plural('action', $totalActions) }}.</div>
+        <div style="display:flex;gap:8px;">
+            @if($unassignedTenants->count() > 0)
+                <a href="{{ route('admin.tenants.index') }}" class="adm-action-btn adm-action-btn-assign">Assign Residents ({{ $unassignedTenants->count() }})</a>
+            @endif
+            @if($pendingGuards->count() > 0)
+                <a href="{{ route('admin.guards.index') }}" class="adm-action-btn adm-action-btn-approve">Review Guards ({{ $pendingGuards->count() }})</a>
+            @endif
         </div>
-        @foreach($unassignedTenants as $ut)
-        @php
-            $uParts = explode(' ', trim($ut->user->name ?? '?'));
-            $uInit  = strtoupper(substr($uParts[0],0,1)).(isset($uParts[1]) ? strtoupper(substr($uParts[1],0,1)) : '');
-        @endphp
-        <div class="adm-action-row">
-            <div class="adm-action-info">
-                <div class="adm-action-avatar">{{ $uInit }}</div>
-                <div>
-                    <span class="adm-action-name">{{ $ut->user->name ?? 'Unknown' }}</span>
-                    <span class="adm-action-meta"><i class="fas fa-clock" style="font-size:9px;"></i> Joined {{ $ut->created_at->diffForHumans() }} &mdash; no apartment assigned</span>
-                </div>
-            </div>
-            <a href="{{ route('admin.tenants.edit', $ut) }}" class="adm-action-btn adm-action-btn-assign">
-                <i class="fas fa-home" style="font-size:10px;"></i> Assign Apartment
-            </a>
-        </div>
-        @endforeach
-        @endif
-
-        {{-- Pending guards --}}
-        @if($pendingGuards->count() > 0)
-        @if($unassignedTenants->count() > 0)<hr class="adm-action-section-sep">@endif
-        <div class="adm-action-section-title">
-            <i class="fas fa-shield-halved"></i>
-            {{ $pendingGuards->count() }} {{ Str::plural('Guard', $pendingGuards->count()) }} Awaiting Approval
-        </div>
-        @foreach($pendingGuards as $pg)
-        @php
-            $gParts = explode(' ', trim($pg->name ?? '?'));
-            $gInit  = strtoupper(substr($gParts[0],0,1)).(isset($gParts[1]) ? strtoupper(substr($gParts[1],0,1)) : '');
-        @endphp
-        <div class="adm-action-row">
-            <div class="adm-action-info">
-                <div class="adm-action-avatar adm-guard-avatar">{{ $gInit }}</div>
-                <div>
-                    <span class="adm-action-name">{{ $pg->name }}</span>
-                    <span class="adm-action-meta" style="color:#1e40af;"><i class="fas fa-clock" style="font-size:9px;"></i> Registered {{ $pg->created_at->diffForHumans() }} &mdash; pending activation</span>
-                </div>
-            </div>
-            <form method="POST" action="{{ route('admin.guards.approve', $pg) }}" style="margin:0;">
-                @csrf @method('PATCH')
-                <button class="adm-action-btn adm-action-btn-approve">
-                    <i class="fas fa-check" style="font-size:10px;"></i> Approve
-                </button>
-            </form>
-        </div>
-        @endforeach
-        @endif
-
-    </div>
-    <div class="adm-action-footer">
-        @if($unassignedTenants->count() > 0)<a href="{{ route('admin.tenants.index') }}">View all tenants &rarr;</a>@endif
-        @if($pendingGuards->count() > 0)<a href="{{ route('admin.guards.index') }}">Review all guards &rarr;</a>@endif
     </div>
 </div>
 @endif
@@ -302,7 +250,7 @@
     <div class="adm-stat">
         <div class="adm-stat-icon"><i class="fas fa-users"></i></div>
         <div class="adm-stat-val">{{ $totalTenants }}</div>
-        <div class="adm-stat-lbl">Tenants</div>
+        <div class="adm-stat-lbl">Residents</div>
         <div class="adm-stat-bar"></div>
     </div>
     <div class="adm-stat">
@@ -372,8 +320,8 @@
     </div>
     <div class="adm-col-hdr">
         <span class="adm-col-h">Visitor</span>
-        <span class="adm-col-h">Tenant</span>
-        <span class="adm-col-h">Apartment</span>
+        <span class="adm-col-h">Resident</span>
+        <span class="adm-col-h">Room</span>
         <span class="adm-col-h">Purpose</span>
         <span class="adm-col-h">Check In</span>
         <span class="adm-col-h">Status</span>
@@ -397,7 +345,7 @@
             </div>
         </div>
         <div style="font-size:13px;color:#475569;">{{ $visit->tenant->user->name ?? '—' }}</div>
-        <div style="font-size:13px;font-weight:700;color:#0f172a;">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+        <div style="font-size:13px;font-weight:700;color:#0f172a;">{{ $visit->tenant->apartment_display ?? '—' }}</div>
         <div><span class="adm-purpose"><i class="fas {{ $purIcon }}" style="font-size:9px;"></i> {{ Str::limit($visit->purpose,16) }}</span></div>
         <div>
             @if($visit->check_in_time)
@@ -415,10 +363,10 @@
 @endsection
 
 @push('scripts')
-<script>
-const chartLabels = @json($chartLabels);
-const chartData   = @json($chartData);
-const statusData  = @json($statusData);
+<script type="text/javascript">
+const chartLabels = JSON.parse('{!! json_encode($chartLabels) !!}');
+const chartData   = JSON.parse('{!! json_encode($chartData) !!}');
+const statusData  = JSON.parse('{!! json_encode($statusData) !!}');
 
 new Chart(document.getElementById('visitorChart'), {
     type: 'bar',

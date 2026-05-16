@@ -8,7 +8,6 @@
         h1 { font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 4px; }
         .sub { font-size: 12px; color: #64748b; margin-bottom: 20px; }
         .meta { display: flex; gap: 30px; margin-bottom: 20px; background: #f8fafc; padding: 12px 16px; border-radius: 6px; }
-        .meta-item { }
         .meta-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: .5px; }
         .meta-value { font-size: 14px; font-weight: 700; color: #0f172a; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -52,7 +51,7 @@
                 <th>#</th>
                 <th>Visitor</th>
                 <th>National ID</th>
-                <th>Tenant</th>
+                <th>Resident</th>
                 <th>Apartment</th>
                 <th>Purpose</th>
                 <th>Check In</th>
@@ -67,7 +66,7 @@
                 <td>{{ $visit->visitor->full_name }}</td>
                 <td>{{ $visit->visitor->national_id ?? '—' }}</td>
                 <td>{{ $visit->tenant->user->name ?? '—' }}</td>
-                <td>{{ $visit->tenant->apartment->apartment_number ?? '—' }}</td>
+                <td>{{ $visit->tenant->apartment_display ?? '—' }}</td>
                 <td>{{ Str::limit($visit->purpose, 30) }}</td>
                 <td>{{ $visit->check_in_time?->format('M d, H:i') ?? '—' }}</td>
                 <td>{{ $visit->check_out_time?->format('M d, H:i') ?? '—' }}</td>

@@ -32,9 +32,11 @@
 .agi-row { display:grid; grid-template-columns:44px 1fr 220px 140px 120px 120px; align-items:center; padding:14px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
 .agi-row:last-child { border-bottom:none; }
 .agi-row:hover { background:#f8faff; }
+.agi-row-pending { background:#fffbeb; }
 .agi-num { font-size:12.5px; font-weight:700; color:#94a3b8; }
 .agi-cell { display:flex; align-items:center; gap:10px; }
 .agi-avatar { width:38px; height:38px; border-radius:50%; background:#dbeafe; color:#1e3a8a; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0; border:2px solid #bfdbfe; }
+.agi-avatar-pending { background:#fef3c7; color:#d97706; border-color:#fde68a; }
 .agi-name { font-size:13px; font-weight:700; color:#0f172a; display:block; margin-bottom:2px; }
 .agi-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:20px; background:#eff6ff; color:#1e3a8a; font-size:10.5px; font-weight:700; }
 .agi-email { font-size:12.5px; color:#475569; }
@@ -156,10 +158,10 @@
         $stIcon   = ['active'=>'fa-check-circle','pending'=>'fa-clock','suspended'=>'fa-ban'][$guard->status] ?? 'fa-clock';
         $stLabel  = ucfirst($guard->status);
     @endphp
-    <div class="agi-row" style="{{ $guard->status === 'pending' ? 'background:#fffbeb;' : '' }}">
+    <div class="agi-row {{ $guard->status === 'pending' ? 'agi-row-pending' : '' }}">
         <span class="agi-num">{{ str_pad($guards->firstItem()+$loop->index,2,'0',STR_PAD_LEFT) }}</span>
         <div class="agi-cell">
-            <div class="agi-avatar" style="{{ $guard->status === 'pending' ? 'background:#fef3c7;color:#d97706;border-color:#fde68a;' : '' }}">{{ $initials }}</div>
+            <div class="agi-avatar {{ $guard->status === 'pending' ? 'agi-avatar-pending' : '' }}">{{ $initials }}</div>
             <div>
                 <span class="agi-name">{{ $guard->name }}</span>
                 <span class="agi-badge"><i class="fas fa-shield-halved" style="font-size:9px;"></i> Guard</span>

@@ -11,19 +11,19 @@ class Visit extends Model
 
     protected $fillable = [
         'visitor_id',
-        'tenant_id',
+        'resident_id',
         'purpose',
         'check_in_time',
         'check_out_time',
         'status',
-        'approved_by_tenant',
+        'approved_by_resident',
         'notes',
     ];
 
     protected $casts = [
         'check_in_time' => 'datetime',
         'check_out_time' => 'datetime',
-        'approved_by_tenant' => 'boolean',
+        'approved_by_resident' => 'boolean',
     ];
 
     public function visitor()
@@ -31,9 +31,40 @@ class Visit extends Model
         return $this->belongsTo(Visitor::class);
     }
 
+    public function resident()
+    {
+        return $this->belongsTo(Resident::class);
+    }
+
+    public function getTenantIdAttribute()
+    {
+        return $this->resident_id;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setTenantIdAttribute($value): void
+    {
+        $this->attributes['resident_id'] = $value;
+    }
+
+    public function getApprovedByTenantAttribute()
+    {
+        return $this->approved_by_resident;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function setApprovedByTenantAttribute($value): void
+    {
+        $this->attributes['approved_by_resident'] = $value;
+    }
+
     public function tenant()
     {
-        return $this->belongsTo(Tenant::class);
+        return $this->resident();
     }
 
     public function getDurationAttribute(): ?string

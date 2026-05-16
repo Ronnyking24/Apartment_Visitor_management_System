@@ -45,13 +45,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('auth.pending');
         }
 
-        if ($user->role === 'admin') {
-            return redirect('/admin/dashboard');
-        } elseif ($user->role === 'guard') {
-            return redirect('/guard/dashboard');
-        } else {
-            return redirect('/tenant/dashboard');
-        }
+        // Redirect to the generic dashboard route; route will dispatch by role.
+        return redirect('/dashboard');
     }
 
     /**
@@ -65,6 +60,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

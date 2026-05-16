@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
-@section('title','Tenants')
-@section('page-title','Tenants')
+@section('title','Residents')
+@section('page-title','Residents')
 
 @push('styles')
 <style>
@@ -24,27 +24,28 @@
 .ati-fbtn { padding:9px 20px; background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff; font-size:13px; font-weight:700; border:none; border-radius:10px; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; }
 .ati-rbtn { padding:9px 16px; background:#f1f5f9; color:#64748b; border:1.5px solid #e2e8f0; border-radius:10px; font-size:13px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all .2s; }
 .ati-rbtn:hover { background:#e2e8f0; color:#0f172a; }
-.ati-panel { background:#fff; border-radius:16px; border:1px solid #e8ecf1; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; }
+.ati-panel { background:#fff; border-radius:16px; border:1px solid #e8ecf1; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow-x:auto; overflow-y:hidden; }
 .ati-panel-head { display:flex; align-items:center; justify-content:space-between; padding:15px 22px; border-bottom:1px solid #f1f5f9; }
 .ati-panel-title { font-size:14px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px; }
-.ati-col-hdr { display:grid; grid-template-columns:44px 1fr 200px 150px 140px 100px 110px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.ati-col-hdr { display:grid; grid-template-columns:44px minmax(220px,1.25fr) minmax(220px,1fr) minmax(180px,1fr) 140px 100px 110px; column-gap:14px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.ati-col-hdr > *, .ati-row > * { min-width:0; }
 .ati-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
-.ati-row { display:grid; grid-template-columns:44px 1fr 200px 150px 140px 100px 110px; align-items:center; padding:13px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
+.ati-row { display:grid; grid-template-columns:44px minmax(220px,1.25fr) minmax(220px,1fr) minmax(180px,1fr) 140px 100px 110px; column-gap:14px; align-items:center; padding:13px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
 .ati-row:last-child { border-bottom:none; }
 .ati-row:hover { background:#f8faff; }
 .ati-num { font-size:12.5px; font-weight:700; color:#94a3b8; }
-.ati-cell { display:flex; align-items:center; gap:10px; }
+.ati-cell { display:flex; align-items:center; gap:10px; min-width:0; }
 .ati-avatar { width:36px; height:36px; border-radius:50%; background:#dbeafe; color:#1e3a8a; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
 .ati-name { font-size:13px; font-weight:700; color:#0f172a; display:block; margin-bottom:1px; }
 .ati-sub  { font-size:11.5px; color:#94a3b8; font-family:monospace; }
-.ati-email { font-size:12.5px; color:#475569; }
-.ati-apt-num { font-size:13px; font-weight:700; color:#1e3a8a; display:block; }
-.ati-apt-block { font-size:11.5px; color:#94a3b8; }
+.ati-email { font-size:12.5px; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ati-apt-num { font-size:13px; font-weight:700; color:#1e3a8a; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ati-apt-block { font-size:11.5px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .ati-unassigned { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; background:#fef3c7; color:#92400e; font-size:11.5px; font-weight:700; }
 .ati-row-pending { background:#fffbeb !important; }
 .ati-row-pending:hover { background:#fef9c3 !important; }
-.ati-phone { font-size:13px; color:#475569; }
-.ati-gender { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; background:#f1f5f9; color:#475569; font-size:12px; font-weight:600; }
+.ati-phone { font-size:13px; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ati-gender { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; background:#f1f5f9; color:#475569; font-size:12px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .ati-act { display:flex; gap:6px; justify-content:flex-end; }
 .ati-btn-v,.ati-btn-e,.ati-btn-d { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; font-size:12px; border:1.5px solid; cursor:pointer; transition:all .18s; text-decoration:none; }
 .ati-btn-v { background:#f1f5f9; color:#64748b; border-color:#e2e8f0; }
@@ -66,7 +67,7 @@
 .dark-mode .ati-row { border-color:rgba(255,255,255,.04); }
 .dark-mode .ati-row:hover { background:#243044; }
 .dark-mode .ati-empty h5 { color:#f1f5f9; }
-@media(max-width:900px){ .ati-col-hdr,.ati-row { grid-template-columns:36px 1fr 180px 130px auto; } .ati-col-hdr span:nth-child(n+6),.ati-row>div:nth-child(n+6) { display:none; } }
+@media(max-width:900px){ .ati-col-hdr,.ati-row { grid-template-columns:36px minmax(220px,1.25fr) minmax(220px,1fr) minmax(180px,1fr) 140px 100px 110px; column-gap:12px; } }
 </style>
 @endpush
 
@@ -75,12 +76,12 @@
 {{-- HEADER --}}
 <div class="ati-header">
     <div>
-        <h2><i class="fas fa-users me-2" style="color:#93c5fd;font-size:15px;"></i>Tenants</h2>
-        <p>Manage all registered tenants and their apartments</p>
+        <h2><i class="fas fa-users me-2" style="color:#93c5fd;font-size:15px;"></i>Residents</h2>
+        <p>Manage all registered residents and their apartments</p>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-        <div class="ati-count-chip"><div><span class="cn">{{ $tenants->total() }}</span><span class="cl">Total Tenants</span></div></div>
-        <a href="{{ route('admin.tenants.create') }}" class="ati-add-btn"><i class="fas fa-plus" style="font-size:11px;"></i> Add Tenant</a>
+        <div class="ati-count-chip"><div><span class="cn">{{ $tenants->total() }}</span><span class="cl">Total Residents</span></div></div>
+        <a href="{{ route('admin.tenants.create') }}" class="ati-add-btn"><i class="fas fa-plus" style="font-size:11px;"></i> Add Resident</a>
     </div>
 </div>
 
@@ -88,7 +89,7 @@
 <div class="ati-toolbar">
     <form method="GET" style="display:contents;">
         <div class="ati-fg">
-            <span class="ati-lbl">Search Tenant</span>
+            <span class="ati-lbl">Search Resident</span>
             <div class="ati-sw">
                 <i class="fas fa-magnifying-glass"></i>
                 <input type="text" name="search" class="ati-inp" placeholder="Name, email, phone, ID…" value="{{ request('search') }}">
@@ -108,7 +109,7 @@
     <div class="ati-panel-head">
         <span class="ati-panel-title">
             <i class="fas fa-users" style="color:#1e3a8a;font-size:13px;"></i>
-            Tenant List
+                Resident List
             <span style="background:#eff6ff;color:#1e3a8a;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:20px;">{{ $tenants->total() }}</span>
         </span>
         <span style="font-size:12.5px;color:#94a3b8;">Showing {{ $tenants->firstItem() ?? 0 }}–{{ $tenants->lastItem() ?? 0 }} of {{ $tenants->total() }}</span>
@@ -141,9 +142,12 @@
         </div>
         <div class="ati-email">{{ $tenant->user->email }}</div>
         <div>
-            @if($tenant->apartment)
-                <span class="ati-apt-num">{{ $tenant->apartment->apartment_number }}</span>
-                <span class="ati-apt-block">{{ $tenant->apartment->block_name }}</span>
+            @php $apartmentLabel = $tenant->apartment_display; @endphp
+            @if($apartmentLabel)
+                <span class="ati-apt-num">{{ $apartmentLabel }}</span>
+                @if($tenant->apartment?->block_name)
+                    <span class="ati-apt-block">{{ $tenant->apartment->block_name }}</span>
+                @endif
             @else
                 <a href="{{ route('admin.tenants.edit', $tenant) }}" style="text-decoration:none;">
                     <span class="ati-unassigned"><i class="fas fa-clock" style="font-size:9px;"></i> Assign</span>
@@ -160,7 +164,7 @@
         <div class="ati-act">
             <a href="{{ route('admin.tenants.show', $tenant) }}" class="ati-btn-v" title="View"><i class="fas fa-eye"></i></a>
             <a href="{{ route('admin.tenants.edit', $tenant) }}" class="ati-btn-e" title="Edit"><i class="fas fa-pen"></i></a>
-            <form method="POST" action="{{ route('admin.tenants.destroy', $tenant) }}" style="margin:0;" onsubmit="return confirm('Delete this tenant and their account?')">
+            <form method="POST" action="{{ route('admin.tenants.destroy', $tenant) }}" style="margin:0;" onsubmit="return confirm('Delete this resident and their account?')">
                 @csrf @method('DELETE')
                 <button class="ati-btn-d" title="Delete"><i class="fas fa-trash"></i></button>
             </form>
@@ -169,8 +173,8 @@
     @empty
     <div class="ati-empty">
         <div class="ati-empty-icon"><i class="fas fa-users"></i></div>
-        <h5>No tenants found</h5>
-        <p>Try a different search term or add a new tenant.</p>
+        <h5>No residents found</h5>
+        <p>Try a different search term or add a new resident.</p>
     </div>
     @endforelse
 

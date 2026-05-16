@@ -300,7 +300,7 @@
                 <i class="fas fa-filter" style="font-size:11px;"></i> Apply
             </button>
             @if($hasFilters)
-            <a href="{{ route('tenant.visits.index') }}" class="vh-reset-btn">
+            <a href="{{ route('resident.visits.index') }}" class="vh-reset-btn">
                 <i class="fas fa-xmark"></i> Clear
             </a>
             @endif
@@ -407,7 +407,7 @@
         </div>
 
         <div>
-            @if($visit->approved_by_tenant)
+            @if($visit->approved_by_resident)
                 <span class="vh-approved yes"><i class="fas fa-check" style="font-size:9px;"></i> Yes</span>
             @else
                 <span class="vh-approved no"><i class="fas fa-minus" style="font-size:9px;"></i> No</span>
@@ -420,16 +420,16 @@
 
         <div style="display:flex;justify-content:flex-end;gap:6px;">
             @if($visit->status === 'pending')
-            <form method="POST" action="{{ route('tenant.visits.approve', $visit) }}" style="margin:0;">
+            <form method="POST" action="{{ route('resident.visits.approve', $visit) }}" style="margin:0;">
                 @csrf @method('PATCH')
                 <button class="vh-approve-btn" title="Approve"><i class="fas fa-check"></i></button>
             </form>
-            <form method="POST" action="{{ route('tenant.visits.reject', $visit) }}" style="margin:0;">
+            <form method="POST" action="{{ route('resident.visits.reject', $visit) }}" style="margin:0;">
                 @csrf @method('PATCH')
                 <button class="vh-reject-btn" title="Reject"><i class="fas fa-times"></i></button>
             </form>
             @else
-            <a href="{{ route('tenant.visits.show', $visit) }}" class="vh-eye-btn" title="View details">
+            <a href="{{ route('resident.visits.show', $visit) }}" class="vh-eye-btn" title="View details">
                 <i class="fas fa-eye"></i>
             </a>
             @endif

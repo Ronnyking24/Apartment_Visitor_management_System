@@ -3,26 +3,29 @@
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Guard;
 use App\Http\Controllers\Tenant;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        $role = auth()->user()->role;
-        if ($role === 'admin') return redirect()->route('admin.dashboard');
-        if ($role === 'guard') return redirect()->route('guard.dashboard');
-        return redirect()->route('tenant.dashboard');
+    if (Auth::check()) {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+        if ($user && $user->isAdmin()) return redirect()->route('admin.dashboard');
+        if ($user && $user->isGuard()) return redirect()->route('guard.dashboard');
+        return redirect()->route('resident.dashboard');
     }
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 // Fallback route named 'dashboard' used internally by Breeze middleware
 Route::get('/dashboard', function () {
-    if (auth()->check()) {
-        $role = auth()->user()->role;
-        if ($role === 'admin') return redirect()->route('admin.dashboard');
-        if ($role === 'guard') return redirect()->route('guard.dashboard');
-        return redirect()->route('tenant.dashboard');
+    if (Auth::check()) {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+        if ($user && $user->isAdmin()) return redirect()->route('admin.dashboard');
+        if ($user && $user->isGuard()) return redirect()->route('guard.dashboard');
+        return redirect()->route('resident.dashboard');
     }
     return redirect()->route('login');
 })->middleware(['auth'])->name('dashboard');
@@ -31,12 +34,13 @@ Route::get('/dashboard', function () {
 // PENDING APPROVAL PAGE
 // ─────────────────────────────────────────────
 Route::get('/pending-approval', function () {
-    if (!auth()->check()) return redirect()->route('login');
-    if (auth()->user()->isActive()) {
-        $role = auth()->user()->role;
-        if ($role === 'admin') return redirect()->route('admin.dashboard');
-        if ($role === 'guard') return redirect()->route('guard.dashboard');
-        return redirect()->route('tenant.dashboard');
+    if (!Auth::check()) return redirect()->route('login');
+    /** @var \App\Models\User|null $user */
+    $user = Auth::user();
+    if ($user && $user->isActive()) {
+        if ($user->isAdmin()) return redirect()->route('admin.dashboard');
+        if ($user->isGuard()) return redirect()->route('guard.dashboard');
+        return redirect()->route('resident.dashboard');
     }
     return view('auth.pending');
 })->middleware('auth')->name('auth.pending');
@@ -95,9 +99,9 @@ Route::prefix('guard')->name('guard.')->middleware(['auth', 'role:guard'])->grou
 });
 
 // ─────────────────────────────────────────────
-// TENANT ROUTES
+// RESIDENT ROUTES
 // ─────────────────────────────────────────────
-Route::prefix('tenant')->name('tenant.')->middleware(['auth', 'role:tenant'])->group(function () {
+Route::prefix('resident')->name('resident.')->middleware(['auth', 'role:resident'])->group(function () {
 
     Route::get('/dashboard', [Tenant\DashboardController::class, 'index'])->name('dashboard');
 
@@ -109,3 +113,10 @@ Route::prefix('tenant')->name('tenant.')->middleware(['auth', 'role:tenant'])->g
 });
 
 require __DIR__.'/auth.php';
+
+// Profile routes (Breeze-style)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});

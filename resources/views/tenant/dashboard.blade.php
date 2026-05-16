@@ -4,7 +4,7 @@
 
 @push('styles')
 <style>
-/* ── TENANT DASHBOARD ── */
+/* ── RESIDENT DASHBOARD ── */
 
 /* Header banner */
 .td-header {
@@ -273,16 +273,16 @@
         'Maintenance'      => ['icon'=>'fa-screwdriver-wrench','class'=>'pur-maintenance'],
         'Social visit'     => ['icon'=>'fa-people-group',      'class'=>'pur-social'],
     ];
-    $aptNum   = $tenant->apartment->apartment_number ?? '—';
-    $block    = $tenant->apartment->block_name       ?? '—';
-    $floor    = $tenant->apartment->floor_number     ?? '—';
+    $aptNum   = $tenant->apartment_display ?? '—';
+    $block    = $tenant->apartment?->block_name       ?? '—';
+    $floor    = $tenant->apartment?->floor_number     ?? '—';
 @endphp
 
 {{-- HEADER BANNER --}}
 <div class="td-header">
     <div class="td-header-left">
         <h2>Welcome back, {{ auth()->user()->name }}</h2>
-        <p>{{ now()->format('l, F d, Y') }} &mdash; Here's what's happening at your apartment</p>
+        <p>{{ now()->format('l, F d, Y') }}; <br><b></b>Easily keep track of your guests and visit history</b></p>
     </div>
     @if($tenant->apartment)
     <div class="td-apt-chip">
@@ -370,7 +370,7 @@
                 <span class="td-live-dot"></span>
                 Currently Visiting Me
             </span>
-            <a href="{{ route('tenant.visits.active') }}" class="td-view-all">View All</a>
+            <a href="{{ route('resident.visits.active') }}" class="td-view-all">View All</a>
         </div>
         @if($activeVisits->isEmpty())
         <div class="td-empty-mini">
@@ -416,7 +416,7 @@
             <i class="fas fa-clock-rotate-left" style="color:#3b82f6;font-size:14px;"></i>
             Recent Visitor Activity
         </span>
-        <a href="{{ route('tenant.visits.index') }}" class="td-view-all">View All</a>
+        <a href="{{ route('resident.visits.index') }}" class="td-view-all">View All</a>
     </div>
 
     {{-- Col headers --}}
@@ -483,16 +483,16 @@
         {{-- Action --}}
         <div style="display:flex;justify-content:flex-end;gap:6px;">
             @if($visit->status === 'pending')
-            <form method="POST" action="{{ route('tenant.visits.approve', $visit) }}" style="margin:0;">
+            <form method="POST" action="{{ route('resident.visits.approve', $visit) }}" style="margin:0;">
                 @csrf @method('PATCH')
                 <button class="td-approve-btn" title="Approve"><i class="fas fa-check"></i></button>
             </form>
-            <form method="POST" action="{{ route('tenant.visits.reject', $visit) }}" style="margin:0;">
+            <form method="POST" action="{{ route('resident.visits.reject', $visit) }}" style="margin:0;">
                 @csrf @method('PATCH')
                 <button class="td-reject-btn" title="Reject"><i class="fas fa-times"></i></button>
             </form>
             @else
-            <a href="{{ route('tenant.visits.show', $visit) }}" class="td-eye-btn" title="View"><i class="fas fa-eye"></i></a>
+            <a href="{{ route('resident.visits.show', $visit) }}" class="td-eye-btn" title="View"><i class="fas fa-eye"></i></a>
             @endif
         </div>
     </div>

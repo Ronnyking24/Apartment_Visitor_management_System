@@ -88,7 +88,8 @@
 /* Column header row */
 .av-col-hdr-row {
     display:grid;
-    grid-template-columns:44px 1fr 180px 160px 120px 110px 140px;
+    grid-template-columns:44px minmax(220px,1fr) minmax(160px,0.9fr) 160px 120px 110px 140px;
+    column-gap:14px;
     padding:9px 22px;
     background:#fafbfc;
     border-bottom:1px solid #f1f5f9;
@@ -99,7 +100,8 @@
 /* Rows */
 .av-row {
     display:grid;
-    grid-template-columns:44px 1fr 180px 160px 120px 110px 140px;
+    grid-template-columns:44px minmax(220px,1fr) minmax(160px,0.9fr) 160px 120px 110px 140px;
+    column-gap:14px;
     align-items:center;
     padding:15px 22px;
     border-bottom:1px solid #f3f4f6;
@@ -113,7 +115,7 @@
 .av-num { font-size:12.5px; font-weight:700; color:#94a3b8; font-variant-numeric:tabular-nums; }
 
 /* Visitor cell */
-.av-visitor-cell { display:flex; align-items:center; gap:12px; min-width:0; }
+.av-visitor-cell { display:flex; align-items:center; gap:16px; min-width:0; }
 .av-avatar-circle {
     width:38px; height:38px; border-radius:50%;
     background:#dbeafe; color:#3b82f6;
@@ -127,8 +129,9 @@
 .av-visitor-sub   { font-size:11.5px; color:#94a3b8; }
 
 /* Host / Apt cell */
-.av-host-name { display:block; font-size:13px; font-weight:600; color:#0f172a; margin-bottom:4px; }
-.av-host-apt  { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#64748b; }
+.av-host-cell { display:flex; flex-direction:column; min-width:0; }
+.av-host-name { display:block; font-size:13px; font-weight:600; color:#0f172a; margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.av-host-apt  { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .av-host-apt i { font-size:10px; color:#94a3b8; }
 
 /* Purpose pill */
@@ -302,7 +305,7 @@
             <span class="av-host-name">{{ $visit->tenant->user->name ?? '—' }}</span>
             <span class="av-host-apt">
                 <i class="fas fa-building"></i>
-                {{ $visit->tenant->apartment->apartment_number ?? 'N/A' }}
+                {{ $visit->tenant->apartment_display ?? 'N/A' }}
             </span>
         </div>
 

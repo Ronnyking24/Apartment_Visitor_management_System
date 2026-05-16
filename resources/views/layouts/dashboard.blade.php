@@ -200,6 +200,15 @@
             text-decoration: none;
         }
         #topbar .btn-icon:hover { background: #e2e8f0; color: #0f172a; }
+        #topbar .btn-icon.btn-notification {
+            background: linear-gradient(135deg, #fff7ed, #fed7aa);
+            color: #c2410c;
+            box-shadow: 0 0 0 1px rgba(234, 88, 12, .12) inset;
+        }
+        #topbar .btn-icon.btn-notification:hover {
+            background: linear-gradient(135deg, #ffedd5, #fdba74);
+            color: #9a3412;
+        }
         #topbar .topbar-user {
             display: flex;
             align-items: center;
@@ -426,7 +435,7 @@
 <!-- ═══════════ SIDEBAR ═══════════ -->
 <nav id="sidebar">
     <div class="sidebar-brand">
-        <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'guard' ? route('guard.dashboard') : route('tenant.dashboard')) }}" class="brand-logo">
+        <a href="{{ auth()->user()->role === 'admin' ? route('admin.dashboard') : (auth()->user()->role === 'guard' ? route('guard.dashboard') : route('resident.dashboard')) }}" class="brand-logo">
             <div class="brand-icon"><i class="fas fa-building"></i></div>
             <div class="brand-text">
                 <span class="brand-name">AVMS</span>
@@ -473,12 +482,12 @@
 
             <!-- Notifications -->
             @php $pendingCount = 0;
-            if(auth()->user()->role === 'tenant' && auth()->user()->tenant) {
-                $pendingCount = \App\Models\Visit::where('tenant_id', auth()->user()->tenant->id)->where('status','pending')->count();
+            if(auth()->user()->role === 'resident' && auth()->user()->resident) {
+                $pendingCount = \App\Models\Visit::where('resident_id', auth()->user()->resident->id)->where('status','pending')->count();
             }
             @endphp
             @if($pendingCount > 0)
-            <a href="{{ route('tenant.visits.index') }}" class="btn-icon position-relative" title="Pending approvals">
+            <a href="{{ route('resident.visits.index') }}" class="btn-icon btn-notification position-relative" title="Pending approvals">
                 <i class="fas fa-bell"></i>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:9px">{{ $pendingCount }}</span>
             </a>

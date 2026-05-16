@@ -31,7 +31,7 @@ class VisitorController extends Controller
     public function show(Visitor $visitor)
     {
         $visits = $visitor->visits()
-            ->with(['tenant.user', 'tenant.apartment'])
+            ->with(['resident.user', 'resident.apartment'])
             ->latest()
             ->paginate(10);
 
@@ -51,7 +51,7 @@ class VisitorController extends Controller
 
     public function visits(Request $request)
     {
-        $query = Visit::with(['visitor', 'tenant.user', 'tenant.apartment']);
+        $query = Visit::with(['visitor', 'resident.user', 'resident.apartment']);
 
         if ($request->filled('search')) {
             $search = $request->search;

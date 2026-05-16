@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Apartment;
-use App\Models\Tenant;
+use App\Models\Resident;
 use App\Models\User;
 use App\Models\Visit;
 use App\Models\Visitor;
@@ -15,9 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Admin
-        User::create([
+        User::updateOrCreate([
+            'email' => 'admin@avms.com',
+        ], [
             'name'     => 'System Administrator',
-            'email'    => 'admin@avms.com',
             'password' => Hash::make('password'),
             'role'     => 'admin',
         ]);
@@ -28,15 +29,16 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Peter Odhiambo', 'email' => 'guard2@avms.com'],
         ];
         foreach ($guards as $g) {
-            User::create([
+            User::updateOrCreate([
+                'email' => $g['email'],
+            ], [
                 'name'     => $g['name'],
-                'email'    => $g['email'],
                 'password' => Hash::make('password'),
                 'role'     => 'guard',
             ]);
         }
 
-        // Apartments
+        // Apartment rooms
         $blocks  = ['A', 'B', 'C'];
         $floors  = [1, 2, 3, 4];
         $apartments = [];
@@ -44,8 +46,9 @@ class DatabaseSeeder extends Seeder
         foreach ($blocks as $block) {
             foreach ($floors as $floor) {
                 for ($u = 1; $u <= 3; $u++) {
-                    $apartments[] = Apartment::create([
+                    $apartments[] = Apartment::updateOrCreate([
                         'apartment_number' => $block . $aptNum,
+                    ], [
                         'block_name'       => 'Block ' . $block,
                         'floor_number'     => $floor,
                         'status'           => 'vacant',
@@ -55,7 +58,7 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Tenant users + tenant records
+        // Resident users + resident records
         $tenantData = [
             ['name' => 'Alice Wanjiku',  'email' => 'alice@avms.com',  'phone' => '0712345678', 'national_id' => 'KE001', 'gender' => 'female'],
             ['name' => 'Bob Mutua',       'email' => 'bob@avms.com',    'phone' => '0723456789', 'national_id' => 'KE002', 'gender' => 'male'],
@@ -66,17 +69,19 @@ class DatabaseSeeder extends Seeder
 
         $tenants = [];
         foreach ($tenantData as $i => $td) {
-            $user = User::create([
+            $user = User::updateOrCreate([
+                'email' => $td['email'],
+            ], [
                 'name'     => $td['name'],
-                'email'    => $td['email'],
                 'password' => Hash::make('password'),
-                'role'     => 'tenant',
+                'role'     => 'resident',
             ]);
             $apt = $apartments[$i];
             $apt->update(['status' => 'occupied']);
-            $tenants[] = Tenant::create([
-                'user_id'      => $user->id,
-                'apartment_id' => $apt->id,
+                $tenants[] = Resident::updateOrCreate([
+                'user_id' => $user->id,
+            ], [
+                    'apartment_id' => $apt->id,
                 'phone'        => $td['phone'],
                 'national_id'  => $td['national_id'],
                 'gender'       => $td['gender'],
@@ -95,7 +100,9 @@ class DatabaseSeeder extends Seeder
 
         $visitors = [];
         foreach ($visitorData as $vd) {
-            $visitors[] = Visitor::create($vd);
+            $visitors[] = Visitor::updateOrCreate([
+                'national_id' => $vd['national_id'],
+            ], $vd);
         }
 
         // Visits
@@ -103,25 +110,28 @@ class DatabaseSeeder extends Seeder
         foreach ($visitors as $i => $visitor) {
             $tenant = $tenants[$i % count($tenants)];
             // Completed past visit
-            Visit::create([
-                'visitor_id'         => $visitor->id,
-                'tenant_id'          => $tenant->id,
-                'purpose'            => $purposes[$i % count($purposes)],
-                'check_in_time'      => now()->subDays(rand(1, 14))->setHour(rand(8, 16)),
-                'check_out_time'     => now()->subDays(rand(0, 1))->setHour(rand(17, 20)),
-                'status'             => 'completed',
-                'approved_by_tenant' => true,
+            Visit::updateOrCreate([
+                'visitor_id' => $visitor->id,
+                'resident_id'  => $tenant->id,
+                'purpose'    => $purposes[$i % count($purposes)],
+                'status'     => 'completed',
+            ], [
+                'check_in_time'      => now()->subDays($i + 2)->setHour(10),
+                'check_out_time'     => now()->subDays($i + 2)->setHour(12),
+                'approved_by_resident' => true,
             ]);
         }
 
         // One active visit
-        Visit::create([
-            'visitor_id'         => $visitors[0]->id,
-            'tenant_id'          => $tenants[0]->id,
-            'purpose'            => 'Delivery package',
-            'check_in_time'      => now()->subHours(1),
-            'status'             => 'active',
-            'approved_by_tenant' => true,
+        Visit::updateOrCreate([
+            'visitor_id' => $visitors[0]->id,
+            'resident_id'  => $tenants[0]->id,
+            'purpose'    => 'Delivery package',
+            'status'     => 'active',
+        ], [
+            'check_in_time'      => now()->subHour(),
+            'check_out_time'     => null,
+            'approved_by_resident' => true,
         ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Apartment;
-use App\Models\Tenant;
+use App\Models\Resident;
 use App\Models\User;
 use App\Models\Visit;
 use App\Models\Visitor;
@@ -15,13 +15,13 @@ class DashboardController extends Controller
     public function index()
     {
         $totalApartments = Apartment::count();
-        $totalTenants = Tenant::count();
+        $totalTenants = Resident::count();
         $totalVisitors = Visitor::count();
         $activeVisits = Visit::where('status', 'active')->count();
         $totalVisits = Visit::count();
         $totalGuards = User::where('role', 'guard')->count();
 
-        $recentVisits = Visit::with(['visitor', 'tenant.user', 'tenant.apartment'])
+        $recentVisits = Visit::with(['visitor', 'resident.user', 'resident.apartment'])
             ->latest()
             ->take(10)
             ->get();
@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $monthlyVisits = Visit::whereMonth('created_at', now()->month)->count();
 
         // Action-required items for notification panel
-        $unassignedTenants = Tenant::with('user')->whereNull('apartment_id')->get();
+        $unassignedTenants = Resident::with('user')->whereNull('apartment_id')->get();
         $pendingGuards     = User::where('role', 'guard')->where('status', 'pending')->get();
 
         // Chart data - last 7 days

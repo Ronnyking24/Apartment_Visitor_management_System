@@ -587,7 +587,7 @@
             <li>
                 <div class="feat-icon fi-amber"><i class="fas fa-bell"></i></div>
                 <div class="feat-body">
-                    <strong>Instant Tenant Notifications</strong>
+                    <strong>Instant Resident Notifications</strong>
                     <span>Notify residents for visitor arrivals and approvals in real-time</span>
                 </div>
             </li>

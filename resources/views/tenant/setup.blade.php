@@ -11,7 +11,7 @@
 
     <h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:8px;letter-spacing:-.3px;">Welcome to AVMS, {{ Auth::user()->name }}!</h2>
     <p style="font-size:14px;color:#64748b;line-height:1.7;margin-bottom:28px;">
-        Your tenant account has been created successfully. An administrator will assign your apartment shortly. Once assigned, you'll have full access to manage your visitors here.
+        Your resident account has been created successfully. An administrator will assign your apartment shortly. Once assigned, you'll have full access to manage your visitors here.
     </p>
 
     <div style="background:#f8faff;border:1.5px solid #bfdbfe;border-radius:16px;padding:22px 24px;text-align:left;margin-bottom:24px;">
@@ -30,7 +30,7 @@
             </div>
             <div>
                 <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:2px;">Apartment Assignment Pending</div>
-                <div style="font-size:12px;color:#64748b;">The admin will assign your apartment unit. This usually happens quickly.</div>
+                <div style="font-size:12px;color:#64748b;">The admin will assign your apartment. This usually happens quickly.</div>
             </div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:12px;">

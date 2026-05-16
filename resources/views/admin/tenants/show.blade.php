@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
-@section('title','Tenant Details')
-@section('page-title','Tenant Details')
+@section('title','Resident Details')
+@section('page-title','Resident Details')
 
 @section('content')
 <div class="row g-3">
@@ -12,12 +12,12 @@
                 </div>
                 <h5 style="font-weight:700;margin-bottom:4px;">{{ $tenant->user->name }}</h5>
                 <p style="font-size:12.5px;color:#64748b;margin-bottom:8px;">{{ $tenant->user->email }}</p>
-                <span class="badge-status badge-active">Tenant</span>
+                <span class="badge-status badge-active">Resident</span>
             </div>
             <div style="padding:20px;">
                 <dl class="row g-2" style="font-size:13.5px;">
                     <dt class="col-5 text-muted">Apartment</dt>
-                    <dd class="col-7 fw-semibold">{{ $tenant->apartment->apartment_number ?? '—' }}</dd>
+                    <dd class="col-7 fw-semibold">{{ $tenant->apartment_display ?? '—' }}</dd>
                     <dt class="col-5 text-muted">Block</dt>
                     <dd class="col-7">{{ $tenant->apartment->block_name ?? '—' }}</dd>
                     <dt class="col-5 text-muted">Phone</dt>

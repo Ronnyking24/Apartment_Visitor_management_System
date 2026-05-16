@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
-@section('title','Edit Tenant')
-@section('page-title','Edit Tenant')
+@section('title','Edit Resident')
+@section('page-title','Edit Resident')
 
 @push('styles')
 <style>
@@ -49,10 +49,10 @@ select.ef-in { cursor:pointer; }
             @php $parts=explode(' ',trim($tenant->user->name));echo strtoupper(substr($parts[0],0,1)).(isset($parts[1])?strtoupper(substr($parts[1],0,1)):''); @endphp
         </div>
         <div>
-            <h2><i class="fas fa-user-pen me-2" style="color:#93c5fd;font-size:14px;"></i>Edit Tenant</h2>
+            <h2><i class="fas fa-user-pen me-2" style="color:#93c5fd;font-size:14px;"></i>Edit Resident</h2>
             <p>{{ $tenant->user->name }} &mdash; {{ $tenant->user->email }}
                 @if($tenant->apartment)
-                    &mdash; <span style="color:#86efac;font-weight:700;">{{ $tenant->apartment->apartment_number }}</span>
+                    &mdash; <span style="color:#86efac;font-weight:700;">{{ $tenant->apartment_display }}</span>
                 @else
                     &mdash; <span style="color:#fde68a;font-weight:700;">No apartment assigned</span>
                 @endif
@@ -124,8 +124,8 @@ select.ef-in { cursor:pointer; }
         </div>
     </div>
 
-    {{-- SECTION: Tenant Profile --}}
-    <div class="ef-sec-title"><i class="fas fa-id-badge"></i> Tenant Profile</div>
+    {{-- SECTION: Resident Profile --}}
+    <div class="ef-sec-title"><i class="fas fa-id-badge"></i> Resident Profile</div>
     <div class="ef-body">
         @if(!$tenant->apartment_id)
         <div class="ef-apt-unassigned"><i class="fas fa-triangle-exclamation" style="font-size:10px;"></i> No apartment currently assigned — select one below to assign.</div>

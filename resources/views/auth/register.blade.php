@@ -38,12 +38,12 @@
         .role-info { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         .ri-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:16px; }
         .ri-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; margin-bottom:10px; }
-        .ri-tenant .ri-icon { background:rgba(16,185,129,.25); color:#34d399; }
+        .ri-resident .ri-icon { background:rgba(16,185,129,.25); color:#34d399; }
         .ri-guard  .ri-icon { background:rgba(59,130,246,.25); color:#60a5fa; }
         .ri-card strong { display:block; font-size:12.5px; font-weight:700; color:#fff; margin-bottom:4px; }
         .ri-card p { font-size:11.5px; color:rgba(255,255,255,.5); line-height:1.5; margin:0; }
         .ri-badge { display:inline-flex; align-items:center; gap:4px; margin-top:8px; padding:3px 9px; border-radius:20px; font-size:10.5px; font-weight:700; }
-        .ri-tenant .ri-badge { background:rgba(16,185,129,.2); color:#34d399; }
+        .ri-resident .ri-badge { background:rgba(16,185,129,.2); color:#34d399; }
         .ri-guard  .ri-badge  { background:rgba(251,191,36,.2); color:#fbbf24; }
 
         /* ── AUTH RIGHT ── */
@@ -67,9 +67,9 @@
         .role-card input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
         .role-card.selected { border-color:var(--blue); background:#eff6ff; box-shadow:0 0 0 3px rgba(37,99,235,.1); }
         .rc-icon { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; margin:0 auto 10px; transition:all .2s; }
-        .rc-tenant-ico { background:#d1fae5; color:#059669; }
+        .rc-resident-ico { background:#d1fae5; color:#059669; }
         .rc-guard-ico  { background:#dbeafe; color:#1e40af; }
-        .role-card.selected .rc-tenant-ico { background:#059669; color:#fff; }
+        .role-card.selected .rc-resident-ico { background:#059669; color:#fff; }
         .role-card.selected .rc-guard-ico  { background:#1e40af; color:#fff; }
         .rc-title { font-size:13px; font-weight:700; color:var(--slate-700); display:block; margin-bottom:2px; }
         .rc-sub   { font-size:11px; color:var(--slate-400); line-height:1.4; }
@@ -161,13 +161,13 @@
             <span class="accent">Securely &amp; Easily</span>
         </h1>
         <p class="hero-desc">
-            Create your account and become part of the AVMS platform. Tenants manage their visitors; security guards control access — all from one secure system.
+            Create your account and become part of the AVMS platform. Residents manage their visitors; security guards control access — all from one secure system.
         </p>
 
         <div class="role-info">
-            <div class="ri-card ri-tenant">
+            <div class="ri-card ri-resident">
                 <div class="ri-icon"><i class="fas fa-house-user"></i></div>
-                <strong>Tenant Account</strong>
+                <strong>Resident Account</strong>
                 <p>Register visitors, approve arrivals, and track all activity at your apartment.</p>
                 <span class="ri-badge"><i class="fas fa-check-circle"></i> Activated instantly</span>
             </div>
@@ -214,10 +214,10 @@
             <span class="role-lbl">Select Your Role</span>
             <div class="role-cards" id="roleCards">
 
-                <label class="role-card ri-tenant {{ old('role','tenant') === 'tenant' ? 'selected' : '' }}" id="cardTenant">
-                    <input type="radio" name="role" value="tenant" {{ old('role','tenant') === 'tenant' ? 'checked' : '' }}>
-                    <div class="rc-icon rc-tenant-ico"><i class="fas fa-house-user"></i></div>
-                    <span class="rc-title">Tenant</span>
+                <label class="role-card ri-resident {{ old('role','resident') === 'resident' ? 'selected' : '' }}" id="cardResident">
+                    <input type="radio" name="role" value="resident" {{ old('role','resident') === 'resident' ? 'checked' : '' }}>
+                    <div class="rc-icon rc-resident-ico"><i class="fas fa-house-user"></i></div>
+                    <span class="rc-title">Resident</span>
                     <span class="rc-sub">Apartment resident managing visitors</span>
                     <div class="rc-check"><i class="fas fa-check"></i></div>
                 </label>
@@ -262,7 +262,7 @@
             </div>
 
             {{-- ── PHONE + NATIONAL ID ── --}}
-            <div class="field-row" id="tenantFields">
+            <div class="field-row" id="residentFields">
                 <div class="field-block" style="margin-bottom:0;">
                     <label class="field-lbl" for="phone">Phone Number <span style="color:#ef4444;">*</span></label>
                     <div class="field-wrap">
@@ -287,7 +287,7 @@
                 </div>
             </div>
 
-            {{-- ── GENDER (tenant only) ── --}}
+            {{-- ── GENDER (resident only) ── --}}
             <div class="field-block" id="genderField">
                 <label class="field-lbl" for="gender">Gender <span style="color:#ef4444;">*</span></label>
                 <div class="field-wrap">
@@ -369,10 +369,10 @@ setInterval(() => {
     slides[current].classList.add('active');
 }, 5000);
 
-/* ── Role card selection + show/hide tenant fields ── */
-function syncTenantFields(role) {
-    const show = role === 'tenant';
-    document.getElementById('tenantFields').style.display = show ? '' : 'none';
+/* ── Role card selection + show/hide resident fields ── */
+function syncResidentFields(role) {
+    const show = role === 'resident';
+    document.getElementById('residentFields').style.display = show ? '' : 'none';
     document.getElementById('genderField').style.display  = show ? '' : 'none';
     ['phone','national_id','gender'].forEach(id => {
         const el = document.getElementById(id);
@@ -383,7 +383,7 @@ document.querySelectorAll('.role-card input[type=radio]').forEach(radio => {
     radio.addEventListener('change', function () {
         document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
         this.closest('.role-card').classList.add('selected');
-        syncTenantFields(this.value);
+        syncResidentFields(this.value);
     });
 });
 document.querySelectorAll('.role-card').forEach(card => {
@@ -394,7 +394,7 @@ document.querySelectorAll('.role-card').forEach(card => {
     });
 });
 // Run on page load to respect old() value after validation failure
-syncTenantFields(document.querySelector('.role-card input[type=radio]:checked')?.value ?? 'tenant');
+syncResidentFields(document.querySelector('.role-card input[type=radio]:checked')?.value ?? 'resident');
 
 /* ── Password toggle ── */
 function togglePwd(inputId, iconId) {

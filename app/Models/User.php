@@ -43,9 +43,14 @@ class User extends Authenticatable
         ];
     }
 
+    public function resident()
+    {
+        return $this->hasOne(Resident::class);
+    }
+
     public function tenant()
     {
-        return $this->hasOne(Tenant::class);
+        return $this->resident();
     }
 
     public function isAdmin(): bool
@@ -58,9 +63,14 @@ class User extends Authenticatable
         return $this->role === 'guard';
     }
 
+    public function isResident(): bool
+    {
+        return $this->role === 'resident';
+    }
+
     public function isTenant(): bool
     {
-        return $this->role === 'tenant';
+        return $this->isResident();
     }
 
     public function isActive(): bool

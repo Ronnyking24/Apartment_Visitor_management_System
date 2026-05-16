@@ -94,7 +94,7 @@
     display:grid; grid-template-columns:1fr auto 1fr;
     align-items:center; gap:0; padding:22px 22px; border-bottom:1px solid #f3f4f6;
 }
-.vd-tl-node { }
+.vd-tl-node { display:block; }
 .vd-tl-lbl { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.6px; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
 .vd-tl-lbl i { font-size:10px; }
 .vd-tl-time { font-size:17px; font-weight:800; color:#0f172a; line-height:1; margin-bottom:2px; }
@@ -228,7 +228,7 @@
 
     {{-- Breadcrumb --}}
     <div class="vd-breadcrumb">
-        <a href="{{ route('tenant.visits.index') }}"><i class="fas fa-clock-rotate-left"></i> Visit History</a>
+        <a href="{{ route('resident.visits.index') }}"><i class="fas fa-clock-rotate-left"></i> Visit History</a>
         <i class="fas fa-chevron-right"></i>
         <span>Visit #{{ $visit->id }}</span>
     </div>
@@ -314,9 +314,9 @@
         {{-- Info grid --}}
         <div class="vd-info-grid">
             <div class="vd-info-cell">
-                <div class="vd-info-lbl"><i class="fas fa-shield-check"></i> Tenant Approval</div>
+                <div class="vd-info-lbl"><i class="fas fa-shield-check"></i> Resident Approval</div>
                 <div class="vd-info-val">
-                    @if($visit->approved_by_tenant)
+                    @if($visit->approved_by_resident)
                         <span class="vd-appr yes"><i class="fas fa-check" style="font-size:10px;"></i> Approved</span>
                     @else
                         <span class="vd-appr no"><i class="fas fa-clock" style="font-size:10px;"></i> Not Yet</span>
@@ -326,7 +326,7 @@
             <div class="vd-info-cell">
                 <div class="vd-info-lbl"><i class="fas fa-building"></i> Apartment</div>
                 <div class="vd-info-val">
-                    {{ $visit->tenant->apartment->apartment_number ?? '—' }}
+                    {{ $visit->tenant->apartment_display ?? '—' }}
                     @if($visit->tenant->apartment)
                         <span style="font-size:12px;color:#94a3b8;font-weight:500;"> &bull; {{ $visit->tenant->apartment->block_name }}</span>
                     @endif
@@ -351,13 +351,13 @@
             This visit is awaiting your approval
         </div>
         <div class="vd-action-btns">
-            <form method="POST" action="{{ route('tenant.visits.approve', $visit) }}" style="flex:1;display:flex;">
+            <form method="POST" action="{{ route('resident.visits.approve', $visit) }}" style="flex:1;display:flex;">
                 @csrf @method('PATCH')
                 <button class="vd-approve-btn">
                     <i class="fas fa-check"></i> Approve Visit
                 </button>
             </form>
-            <form method="POST" action="{{ route('tenant.visits.reject', $visit) }}" style="flex:1;display:flex;"
+            <form method="POST" action="{{ route('resident.visits.reject', $visit) }}" style="flex:1;display:flex;"
                   onsubmit="return confirm('Reject this visit?')">
                 @csrf @method('PATCH')
                 <button class="vd-reject-btn">
@@ -369,7 +369,7 @@
     @endif
 
     {{-- BACK BUTTON --}}
-    <a href="{{ route('tenant.visits.index') }}" class="vd-back">
+    <a href="{{ route('resident.visits.index') }}" class="vd-back">
         <i class="fas fa-arrow-left" style="font-size:12px;"></i>
         Back to Visit History
     </a>

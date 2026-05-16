@@ -22,24 +22,25 @@
 .avsi-fbtn { padding:9px 20px; background:linear-gradient(135deg,#1e3a8a,#1d4ed8); color:#fff; font-size:13px; font-weight:700; border:none; border-radius:10px; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; }
 .avsi-rbtn { padding:9px 16px; background:#f1f5f9; color:#64748b; border:1.5px solid #e2e8f0; border-radius:10px; font-size:13px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all .2s; }
 .avsi-rbtn:hover { background:#e2e8f0; color:#0f172a; }
-.avsi-panel { background:#fff; border-radius:16px; border:1px solid #e8ecf1; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow:hidden; }
+.avsi-panel { background:#fff; border-radius:16px; border:1px solid #e8ecf1; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow-x:auto; overflow-y:hidden; }
 .avsi-panel-head { display:flex; align-items:center; justify-content:space-between; padding:15px 22px; border-bottom:1px solid #f1f5f9; }
 .avsi-panel-title { font-size:14px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px; }
-.avsi-col-hdr { display:grid; grid-template-columns:44px 1fr 130px 110px 140px 130px 130px 80px 110px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.avsi-col-hdr { display:grid; grid-template-columns:44px minmax(220px,1.2fr) minmax(180px,.95fr) 130px minmax(140px,.9fr) 130px 130px 80px 110px; column-gap:14px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.avsi-col-hdr > *, .avsi-row > * { min-width:0; }
 .avsi-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
-.avsi-row { display:grid; grid-template-columns:44px 1fr 130px 110px 140px 130px 130px 80px 110px; align-items:center; padding:12px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
+.avsi-row { display:grid; grid-template-columns:44px minmax(220px,1.2fr) minmax(180px,.95fr) 130px minmax(140px,.9fr) 130px 130px 80px 110px; column-gap:14px; align-items:center; padding:12px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
 .avsi-row:last-child { border-bottom:none; }
 .avsi-row:hover { background:#f8faff; }
 .avsi-num { font-size:12.5px; font-weight:700; color:#94a3b8; }
-.avsi-vc { display:flex; align-items:center; gap:9px; }
+.avsi-vc { display:flex; align-items:center; gap:9px; min-width:0; }
 .avsi-avatar { width:32px; height:32px; border-radius:50%; background:#dbeafe; color:#1e3a8a; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; overflow:hidden; }
 .avsi-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-.avsi-vname { font-size:12.5px; font-weight:700; color:#0f172a; display:block; }
-.avsi-vsub  { font-size:11px; color:#94a3b8; }
-.avsi-cell-sm { font-size:12.5px; color:#475569; }
+.avsi-vname { font-size:12.5px; font-weight:700; color:#0f172a; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.avsi-vsub  { font-size:11px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.avsi-cell-sm { font-size:12.5px; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .avsi-purpose { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:600; background:#f1f5f9; color:#475569; }
-.avsi-time { font-size:12px; color:#475569; display:block; }
-.avsi-time-s { font-size:11px; color:#94a3b8; display:block; }
+.avsi-time { font-size:12px; color:#475569; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.avsi-time-s { font-size:11px; color:#94a3b8; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .avsi-appr-yes { color:#16a34a; font-size:14px; }
 .avsi-appr-no  { color:#94a3b8; font-size:13px; }
 .avsi-status { display:inline-flex; align-items:center; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:700; }
@@ -60,7 +61,7 @@
 .dark-mode .avsi-row { border-color:rgba(255,255,255,.04); }
 .dark-mode .avsi-row:hover { background:#243044; }
 .dark-mode .avsi-empty h5 { color:#f1f5f9; }
-@media(max-width:1100px){ .avsi-col-hdr,.avsi-row { grid-template-columns:36px 1fr 120px 130px 120px 100px; } .avsi-col-hdr span:nth-child(n+7),.avsi-row>div:nth-child(n+7) { display:none; } }
+@media(max-width:1100px){ .avsi-col-hdr,.avsi-row { grid-template-columns:44px minmax(220px,1.2fr) minmax(180px,.95fr) 130px minmax(140px,.9fr) 130px 130px 80px 110px; column-gap:12px; } }
 </style>
 @endpush
 
@@ -132,8 +133,8 @@
     <div class="avsi-col-hdr">
         <span class="avsi-col-h">#</span>
         <span class="avsi-col-h">Visitor</span>
-        <span class="avsi-col-h">Tenant</span>
-        <span class="avsi-col-h">Apt.</span>
+        <span class="avsi-col-h">Resident</span>
+        <span class="avsi-col-h">Apartment</span>
         <span class="avsi-col-h">Purpose</span>
         <span class="avsi-col-h">Check In</span>
         <span class="avsi-col-h">Check Out</span>
@@ -161,7 +162,7 @@
             </div>
         </div>
         <div class="avsi-cell-sm">{{ $visit->tenant->user->name ?? '—' }}</div>
-        <div style="font-size:13px;font-weight:700;color:#1e3a8a;">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+        <div style="font-size:13px;font-weight:700;color:#1e3a8a;">{{ $visit->tenant->apartment_display ?? '—' }}</div>
         <div><span class="avsi-purpose"><i class="fas {{ $purIcon }}" style="font-size:9px;"></i> {{ Str::limit($visit->purpose,14) }}</span></div>
         <div>
             @if($visit->check_in_time)
@@ -176,7 +177,7 @@
             @else<span style="color:#94a3b8;">—</span>@endif
         </div>
         <div>
-            @if($visit->approved_by_tenant)
+            @if($visit->approved_by_resident)
                 <i class="fas fa-check-circle avsi-appr-yes" title="Approved"></i>
             @else
                 <i class="fas fa-clock avsi-appr-no" title="Pending"></i>

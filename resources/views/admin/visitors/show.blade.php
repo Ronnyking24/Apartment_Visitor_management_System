@@ -180,8 +180,8 @@
 
             @if($visits->total())
             <div class="vp-col-hdr">
-                <span class="vp-col-h">Tenant</span>
-                <span class="vp-col-h">Apt.</span>
+                <span class="vp-col-h">Resident</span>
+                <span class="vp-col-h">Apartment</span>
                 <span class="vp-col-h">Purpose</span>
                 <span class="vp-col-h">Check In</span>
                 <span class="vp-col-h">Check Out</span>
@@ -192,7 +192,7 @@
                 <div>
                     <span class="vp-tenant-name">{{ $visit->tenant->user->name ?? '—' }}</span>
                 </div>
-                <div class="vp-apt-badge">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+                <div class="vp-apt-badge">{{ $visit->tenant->apartment_display ?? '—' }}</div>
                 <div><span class="vp-purpose">{{ Str::limit($visit->purpose, 22) }}</span></div>
                 <div>
                     <span class="vp-time">{{ $visit->check_in_time?->format('M d') ?? '—' }}</span>

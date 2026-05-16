@@ -162,6 +162,7 @@
     background:#fafbfc;
     border-bottom:1px solid #f1f5f9;
 }
+.lg-col-hdr-row > *, .lg-row > * { min-width:0; }
 .lg-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
 .lg-col-h.right { text-align:right; }
 
@@ -195,8 +196,8 @@
 .lg-avatar-circle img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
 .lg-vinfo { min-width:0; }
 .lg-vname-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:3px; }
-.lg-visitor-name  { font-size:13.5px; font-weight:700; color:#0f172a; }
-.lg-visitor-phone { font-size:12px; color:#94a3b8; }
+.lg-visitor-name  { font-size:13.5px; font-weight:700; color:#0f172a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lg-visitor-phone { font-size:12px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 /* Purpose pill */
 .lg-purpose {
@@ -212,12 +213,12 @@
 .pur-other       { background:#f1f5f9; color:#475569; }
 
 /* Host / Apt cell */
-.lg-host-name { display:block; font-size:13px; font-weight:600; color:#0f172a; margin-bottom:4px; }
-.lg-host-apt  { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#64748b; }
+.lg-host-name { display:block; font-size:13px; font-weight:600; color:#0f172a; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.lg-host-apt  { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .lg-host-apt i { font-size:10px; color:#94a3b8; }
 
 /* Times cell */
-.lg-time-row { display:flex; align-items:center; gap:8px; }
+.lg-time-row { display:flex; align-items:center; gap:8px; min-width:0; }
 .lg-time-row + .lg-time-row { margin-top:5px; }
 .lg-tlbl { font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; width:24px; flex-shrink:0; }
 .lg-tval      { font-size:13px; font-weight:700; color:#0f172a; font-variant-numeric:tabular-nums; }
@@ -468,7 +469,7 @@
             <span class="lg-host-name">{{ $visit->tenant->user->name ?? '—' }}</span>
             <span class="lg-host-apt">
                 <i class="fas fa-building"></i>
-                {{ $visit->tenant->apartment->apartment_number ?? 'N/A' }}
+                {{ $visit->tenant->apartment_display ?? 'N/A' }}
             </span>
         </div>
 

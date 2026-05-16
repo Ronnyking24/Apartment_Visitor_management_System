@@ -5,15 +5,25 @@
 @section('content')
 <div class="row justify-content-center">
     <div class="col-lg-7">
-        {{-- Success banner for fresh check-in --}}
+        {{-- Success banner for fresh check-in or pending approval --}}
         @if(session('success'))
-        <div style="background:linear-gradient(135deg,#0f1623,#1a2a4a);border-radius:14px;padding:28px;text-align:center;color:#fff;margin-bottom:24px;">
-            <div style="width:60px;height:60px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;">
-                <i class="fas fa-check"></i>
+            @if($visit->status === 'pending')
+            <div style="background:linear-gradient(135deg,#0f1623,#1a2a4a);border-radius:14px;padding:28px;text-align:center;color:#fff;margin-bottom:24px;">
+                <div style="width:60px;height:60px;background:#f59e0b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h4 style="font-weight:800;margin-bottom:6px;">Visitor Registration Submitted</h4>
+                <p style="opacity:.7;font-size:13.5px;margin:0;">Waiting for resident approval.</p>
             </div>
-            <h4 style="font-weight:800;margin-bottom:6px;">Visitor Checked In!</h4>
-            <p style="opacity:.7;font-size:13.5px;margin:0;">{{ $visit->visitor->full_name }} has been successfully registered.</p>
-        </div>
+            @else
+            <div style="background:linear-gradient(135deg,#0f1623,#1a2a4a);border-radius:14px;padding:28px;text-align:center;color:#fff;margin-bottom:24px;">
+                <div style="width:60px;height:60px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h4 style="font-weight:800;margin-bottom:6px;">Visitor Checked In!</h4>
+                <p style="opacity:.7;font-size:13.5px;margin:0;">Checked in successfully.</p>
+            </div>
+            @endif
         @endif
 
         <div class="card-panel mb-3">
@@ -44,7 +54,7 @@
                     </div>
                     <div class="col-6">
                         <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">Apartment</div>
-                        <div style="font-weight:700;font-size:14px;">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+                        <div style="font-weight:700;font-size:14px;">{{ $visit->tenant->apartment_display ?? '—' }}</div>
                     </div>
                     <div class="col-6">
                         <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">Purpose</div>

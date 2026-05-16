@@ -1,13 +1,13 @@
 @extends('layouts.dashboard')
-@section('title','Add Tenant')
-@section('page-title','Add Tenant')
+@section('title','Add Resident')
+@section('page-title','Add Resident')
 
 @section('content')
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="card-panel">
-            <div class="card-header-custom">
-                <h6 class="card-title-custom"><i class="fas fa-user-plus me-2 text-primary"></i>New Tenant</h6>
+                <div class="card-header-custom">
+                <h6 class="card-title-custom"><i class="fas fa-user-plus me-2 text-primary"></i>New Resident</h6>
                 <a href="{{ route('admin.tenants.index') }}" class="btn btn-sm btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
             </div>
             <div style="padding:24px;">
@@ -34,11 +34,11 @@
                             <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
                             <input type="password" name="password_confirmation" class="form-control" required>
                         </div>
-                        <div class="col-12 mt-2"><h6 style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Tenant Profile</h6><hr style="margin-top:0;border-color:#f1f5f9;"></div>
+                        <div class="col-12 mt-2"><h6 style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Resident Profile</h6><hr style="margin-top:0;border-color:#f1f5f9;"></div>
                         <div class="col-md-6">
                             <label class="form-label">Apartment <span class="text-danger">*</span></label>
                             <select name="apartment_id" class="form-select @error('apartment_id') is-invalid @enderror" required>
-                                <option value="">Select apartment…</option>
+                                <option value="">Select room…</option>
                                 @foreach($apartments as $apt)
                                     <option value="{{ $apt->id }}" {{ old('apartment_id')==$apt->id?'selected':'' }}>
                                         {{ $apt->apartment_number }} — {{ $apt->block_name }} ({{ ucfirst($apt->status) }})
@@ -66,7 +66,7 @@
                         </div>
                         <div class="col-12 d-flex gap-2 justify-content-end pt-2">
                             <a href="{{ route('admin.tenants.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Create Tenant</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Create Resident</button>
                         </div>
                     </div>
                 </form>

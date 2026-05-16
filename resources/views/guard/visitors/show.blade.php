@@ -41,13 +41,13 @@
             <div class="table-responsive">
                 <table class="table table-modern mb-0">
                     <thead>
-                        <tr><th>Tenant</th><th>Apt.</th><th>Purpose</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Action</th></tr>
+                        <tr><th>Resident</th><th>Room</th><th>Purpose</th><th>Check In</th><th>Check Out</th><th>Status</th><th>Action</th></tr>
                     </thead>
                     <tbody>
                         @forelse($visitor->visits as $visit)
                         <tr>
                             <td style="font-size:13px;font-weight:600;">{{ $visit->tenant->user->name ?? '—' }}</td>
-                            <td style="font-size:13px;">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</td>
+                            <td style="font-size:13px;">{{ $visit->tenant->apartment_display ?? '—' }}</td>
                             <td style="font-size:13px;">{{ Str::limit($visit->purpose, 25) }}</td>
                             <td style="font-size:12px;color:#64748b;">{{ $visit->check_in_time?->format('M d, H:i') ?? '—' }}</td>
                             <td style="font-size:12px;color:#64748b;">{{ $visit->check_out_time?->format('M d, H:i') ?? '—' }}</td>

@@ -8,9 +8,15 @@
     <span class="nav-icon"><i class="fas fa-building"></i></span> Apartments
 </a>
 <a href="{{ route('admin.tenants.index') }}" class="nav-link {{ request()->routeIs('admin.tenants.*') ? 'active' : '' }}">
-    <span class="nav-icon"><i class="fas fa-users"></i></span> Tenants
-    @php $unassigned = \App\Models\Tenant::whereNull('apartment_id')->count(); @endphp
-    @if($unassigned > 0)<span class="nav-badge" title="{{ $unassigned }} tenant(s) need apartment assignment">{{ $unassigned }}</span>@endif
+    <span class="nav-icon"><i class="fas fa-users"></i></span> Residents
+    @php
+        $residentQuery = \App\Models\Resident::whereNull('apartment_id');
+        if (\Illuminate\Support\Facades\Schema::hasColumn('residents', 'apartment_room_id')) {
+            $residentQuery = $residentQuery->whereNull('apartment_room_id');
+        }
+        $unassigned = $residentQuery->count();
+    @endphp
+    @if($unassigned > 0)<span class="nav-badge" title="{{ $unassigned }} resident(s) need apartment assignment">{{ $unassigned }}</span>@endif
 </a>
 <a href="{{ route('admin.guards.index') }}" class="nav-link {{ request()->routeIs('admin.guards.*') ? 'active' : '' }}">
     <span class="nav-icon"><i class="fas fa-shield-halved"></i></span> Security Guards

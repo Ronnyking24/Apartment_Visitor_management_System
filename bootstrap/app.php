@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
             $role = $request->user()?->role;
             if ($role === 'admin')  return '/admin/dashboard';
             if ($role === 'guard')  return '/guard/dashboard';
-            return '/tenant/dashboard';
+            return '/resident/dashboard';
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

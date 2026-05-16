@@ -42,15 +42,16 @@
 .rp-panel-head { display:flex; align-items:center; justify-content:space-between; padding:15px 22px; border-bottom:1px solid #f1f5f9; }
 .rp-panel-title { font-size:14px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px; }
 .rp-col-hdr { display:grid; grid-template-columns:40px 1.4fr 1fr 100px 1fr 130px 130px 90px 100px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.rp-col-hdr > *, .rp-row > * { min-width:0; }
 .rp-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
 .rp-row { display:grid; grid-template-columns:40px 1.4fr 1fr 100px 1fr 130px 130px 90px 100px; align-items:center; padding:12px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
 .rp-row:last-child { border-bottom:none; }
 .rp-row:hover { background:#f8faff; }
 .rp-num { font-size:12px; font-weight:700; color:#94a3b8; }
-.rp-visitor-name { font-size:13px; font-weight:700; color:#0f172a; display:block; }
-.rp-visitor-id   { font-size:11px; color:#94a3b8; font-family:monospace; }
-.rp-cell-sm { font-size:13px; color:#475569; }
-.rp-cell-mono { font-size:12px; color:#64748b; }
+.rp-visitor-name { font-size:13px; font-weight:700; color:#0f172a; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rp-visitor-id   { font-size:11px; color:#94a3b8; font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rp-cell-sm { font-size:13px; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.rp-cell-mono { font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .rp-purpose { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; background:#f1f5f9; color:#475569; font-size:12px; font-weight:600; }
 .rp-status { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:700; white-space:nowrap; }
 .rp-status-active    { background:#dbeafe; color:#1e40af; }
@@ -161,8 +162,8 @@
     <div class="rp-col-hdr">
         <span class="rp-col-h">#</span>
         <span class="rp-col-h">Visitor</span>
-        <span class="rp-col-h">Tenant</span>
-        <span class="rp-col-h">Apt.</span>
+        <span class="rp-col-h">Resident</span>
+        <span class="rp-col-h">Apartment</span>
         <span class="rp-col-h">Purpose</span>
         <span class="rp-col-h">Check In</span>
         <span class="rp-col-h">Check Out</span>
@@ -178,7 +179,7 @@
             <span class="rp-visitor-id">{{ $visit->visitor->national_id ?? '' }}</span>
         </div>
         <div class="rp-cell-sm">{{ $visit->tenant->user->name ?? '—' }}</div>
-        <div style="font-size:13px;font-weight:700;color:#1e3a8a;">{{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+        <div style="font-size:13px;font-weight:700;color:#1e3a8a;">{{ $visit->tenant->apartment_display ?? '—' }}</div>
         <div><span class="rp-purpose">{{ Str::limit($visit->purpose, 20) }}</span></div>
         <div class="rp-cell-mono">{{ $visit->check_in_time?->format('M d, H:i') ?? '—' }}</div>
         <div class="rp-cell-mono">{{ $visit->check_out_time?->format('M d, H:i') ?? '—' }}</div>
@@ -200,14 +201,14 @@
 @endsection
 
 @push('scripts')
-<script>
+<script type="text/javascript">
 new Chart(document.getElementById('monthlyChart'), {
     type: 'bar',
     data: {
-        labels: @json($monthlyLabels),
+        labels: JSON.parse('{!! json_encode($monthlyLabels) !!}'),
         datasets: [{
             label: 'Visits',
-            data: @json($monthlyData),
+            data: JSON.parse('{!! json_encode($monthlyData) !!}'),
             backgroundColor: 'rgba(30,58,138,.1)',
             borderColor: '#1e3a8a',
             borderWidth: 2,

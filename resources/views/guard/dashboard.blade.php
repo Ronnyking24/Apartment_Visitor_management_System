@@ -17,6 +17,7 @@
     flex-wrap: wrap;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 8px 32px rgba(15,23,42,.25);
 }
 .gd-shift-banner::before {
     content: '';
@@ -38,20 +39,20 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    background: rgba(59,130,246,.15);
-    border: 1px solid rgba(59,130,246,.3);
-    color: #93c5fd;
+    background: rgba(132,204,22,.2);
+    border: 1px solid rgba(132,204,22,.4);
+    color: #bef264;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    padding: 4px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     margin-bottom: 8px;
 }
 .gd-duty-dot {
     width: 7px; height: 7px;
-    background: #93c5fd;
+    background: #bef264;
     border-radius: 50%;
     animation: gdPulse 1.6s ease-in-out infinite;
 }
@@ -60,7 +61,7 @@
     50%      { opacity: .5; transform: scale(1.4); }
 }
 .gd-shift-name {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
     color: #fff;
     margin: 0 0 4px;
@@ -68,13 +69,13 @@
 }
 .gd-shift-sub {
     font-size: 13px;
-    color: rgba(255,255,255,.45);
+    color: rgba(255,255,255,.5);
 }
 .gd-clock-block {
     text-align: right;
 }
 .gd-clock {
-    font-size: 34px;
+    font-size: 38px;
     font-weight: 800;
     color: #fff;
     letter-spacing: -1px;
@@ -83,8 +84,8 @@
 }
 .gd-date {
     font-size: 12px;
-    color: rgba(255,255,255,.45);
-    margin-top: 4px;
+    color: rgba(255,255,255,.5);
+    margin-top: 6px;
 }
 .gd-shift-divider {
     width: 1px;
@@ -96,18 +97,18 @@
 /* ── STAT CARDS ── */
 .gd-stat {
     background: #fff;
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 20px 22px;
     display: flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
-    border: 1px solid rgba(0,0,0,.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    border: 1px solid #e8ecf1;
     position: relative;
     overflow: hidden;
-    transition: transform .2s, box-shadow .2s;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
 }
-.gd-stat:hover { transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,.1); }
+.gd-stat:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.12); border-color: #dbeafe; }
 .gd-stat-stripe {
     position: absolute;
     top: 0; left: 0; bottom: 0;
@@ -122,7 +123,7 @@
     flex-shrink: 0;
 }
 .gd-stat-num {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
     color: #0f172a;
     line-height: 1;
@@ -176,9 +177,9 @@
 .gd-action-btn.primary {
     background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(30,58,138,.3);
+    box-shadow: 0 6px 16px rgba(30,58,138,.35);
 }
-.gd-action-btn.primary:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); box-shadow: 0 6px 16px rgba(30,58,138,.4); color:#fff; }
+.gd-action-btn.primary:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); box-shadow: 0 8px 20px rgba(30,58,138,.45); color:#fff; transform: translateY(-1px); }
 .gd-action-btn.danger {
     background: #f1f5f9;
     color: #1e3a8a;
@@ -517,8 +518,8 @@
                         <div class="gd-vcard-name">{{ $visit->visitor->full_name }}</div>
                         <div class="gd-vcard-meta">{{ Str::limit($visit->purpose, 28) }}</div>
                     </div>
-                    <div class="gd-vcard-apt">
-                        <div class="gd-apt-pill">{{ $visit->tenant->apartment->apartment_number ?? 'N/A' }}</div>
+                        <div class="gd-vcard-apt">
+                        <div class="gd-apt-pill">{{ $visit->tenant->apartment_display ?? 'N/A' }}</div>
                         <div class="gd-time-in"><i class="fas fa-clock" style="font-size:10px;"></i> {{ $visit->check_in_time?->format('H:i') }}</div>
                     </div>
                     <form method="POST" action="{{ route('guard.visits.checkout', $visit) }}" onsubmit="return confirm('Check out {{ $visit->visitor->full_name }}?')">
@@ -560,7 +561,7 @@
                             <span class="gd-feed-name">{{ $visit->visitor->full_name }}</span>
                             <span class="gd-status-chip chip-{{ $visit->status }}">{{ $visit->status === 'active' ? 'Inside' : ($visit->status === 'completed' ? 'Out' : ucfirst($visit->status)) }}</span>
                         </div>
-                        <div class="gd-feed-sub">{{ Str::limit($visit->purpose, 40) }} &bull; Apt {{ $visit->tenant->apartment->apartment_number ?? '—' }}</div>
+                        <div class="gd-feed-sub">{{ Str::limit($visit->purpose, 40) }} &bull; Apartment {{ $visit->tenant->apartment_display ?? '—' }}</div>
                     </div>
                     <div class="gd-feed-time">
                         {{ $visit->check_in_time?->format('H:i') ?? '—' }}
