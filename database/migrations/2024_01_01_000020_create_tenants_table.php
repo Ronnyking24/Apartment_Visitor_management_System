@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('residents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('apartment_room_id')->constrained('apartment_rooms')->nullOnDelete();
+            $table->foreignId('apartment_room_id')->nullable()->constrained('apartment_rooms')->nullOnDelete();
             $table->string('phone')->nullable();
             $table->string('national_id')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();

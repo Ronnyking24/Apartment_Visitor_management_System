@@ -49,6 +49,5 @@ class Apartment extends Model
     public function setApartmentNumberAttribute($value): void
     {
         $this->attributes['apartment_number'] = $value;
-        $this->attributes['apartment_room_number'] = $value;
     }
 }
