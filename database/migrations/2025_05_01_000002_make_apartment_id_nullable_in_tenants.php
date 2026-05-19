@@ -25,12 +25,13 @@ return new class extends Migration
                     });
                 }
             }
+
         }
     }
 
     public function down(): void
     {
-        if (DB::getDriverName() === 'mysql') {
+        if (DB::getDriverName() === 'mysql' && Schema::hasTable('tenants')) {
             Schema::table('tenants', function (Blueprint $table) {
                 $table->foreignId('apartment_id')->nullable(false)->change();
             });
