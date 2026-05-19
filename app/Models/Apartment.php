@@ -11,7 +11,7 @@ class Apartment extends Model
     protected $table = 'apartments';
 
     protected $fillable = [
-        'apartment_number',
+       'apartment_number',
         'block_name',
         'floor_number',
         'status',
@@ -40,7 +40,7 @@ class Apartment extends Model
 
     public function getApartmentNumberAttribute()
     {
-        return $this->attributes['apartment_number'] ?? $this->attributes['apartment_room_number'] ?? null;
+        return $this->attributes['apartment_number'] ?? null;
     }
 
     /**
@@ -49,6 +49,5 @@ class Apartment extends Model
     public function setApartmentNumberAttribute($value): void
     {
         $this->attributes['apartment_number'] = $value;
-        $this->attributes['apartment_room_number'] = $value;
     }
 }

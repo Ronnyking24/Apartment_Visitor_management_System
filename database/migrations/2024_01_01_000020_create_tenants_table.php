@@ -9,9 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('residents', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('apartment_room_id')->constrained('apartment_rooms')->nullOnDelete();
+            $table->unsignedBigInteger('apartment_room_id')->nullable();
+            $table->foreign('apartment_room_id')->references('id')->on('apartment_rooms')->nullOnDelete();
             $table->string('phone')->nullable();
             $table->string('national_id')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();

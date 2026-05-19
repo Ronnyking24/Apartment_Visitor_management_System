@@ -13,7 +13,7 @@ class Resident extends Model
 
     protected $fillable = [
         'user_id',
-        'apartment_id',
+       'apartment_id',
         'phone',
         'national_id',
         'gender',
@@ -31,7 +31,7 @@ class Resident extends Model
 
     public function getApartmentIdAttribute()
     {
-        return $this->attributes['apartment_id'] ?? $this->attributes['apartment_room_id'] ?? null;
+        return $this->attributes['apartment_id'] ?? null;
     }
 
     /**
@@ -44,15 +44,12 @@ class Resident extends Model
 
     public function apartment()
     {
-        // Support both pre-migration and post-migration column names.
-        // Prefer the new column when it actually has a value, otherwise use the legacy one.
-        $fk = !empty($this->attributes['apartment_id']) ? 'apartment_id' : 'apartment_room_id';
-        return $this->belongsTo(Apartment::class, $fk);
+        return $this->belongsTo(Apartment::class, 'apartment_id');
     }
 
     public function getApartmentDisplayAttribute(): ?string
     {
-        $apartmentId = $this->attributes['apartment_id'] ?? $this->attributes['apartment_room_id'] ?? null;
+        $apartmentId = $this->attributes['apartment_id'] ?? null;
 
         if (!$apartmentId) {
             return null;
