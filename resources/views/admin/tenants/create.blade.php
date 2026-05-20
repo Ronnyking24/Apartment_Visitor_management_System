@@ -41,7 +41,7 @@
                                 <option value="">Select room…</option>
                                 @foreach($apartments as $apt)
                                     <option value="{{ $apt->id }}" {{ old('apartment_id')==$apt->id?'selected':'' }}>
-                                        {{ $apt->apartment_number }} — {{ $apt->block_name }} ({{ ucfirst($apt->status) }})
+                                        {{ $apt->apartment_number }} — {{ $apt->block_name }}
                                     </option>
                                 @endforeach
                             </select>

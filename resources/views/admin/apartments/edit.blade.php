@@ -117,15 +117,6 @@ textarea.ef-in { resize:vertical; min-height:88px; padding-top:10px; line-height
         </div>
     </div>
 
-    {{-- Section: Notes --}}
-    <div class="ef-sec-title"><i class="fas fa-note-sticky"></i> Notes</div>
-    <div class="ef-body">
-        <div class="ef-field">
-            <label class="ef-lbl" for="notes">Additional Notes</label>
-            <textarea id="notes" name="notes" class="ef-in no-ico" placeholder="Any notes about this apartment…">{{ old('notes', $apartment->notes) }}</textarea>
-        </div>
-    </div>
-
     {{-- Footer --}}
     <div class="ef-footer">
         <a href="{{ route('admin.apartments.index') }}" class="ef-btn-cancel">

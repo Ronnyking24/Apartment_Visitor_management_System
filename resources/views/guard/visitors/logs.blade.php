@@ -157,10 +157,11 @@
 /* Column header row */
 .lg-col-hdr-row {
     display:grid;
-    grid-template-columns:56px 1fr 190px 130px 240px;
+    grid-template-columns:50px 1.5fr 140px 120px 100px 100px 80px;
     padding:9px 22px;
     background:#fafbfc;
     border-bottom:1px solid #f1f5f9;
+    align-items:center;
 }
 .lg-col-hdr-row > *, .lg-row > * { min-width:0; }
 .lg-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
@@ -169,7 +170,7 @@
 /* Visit rows */
 .lg-row {
     display:grid;
-    grid-template-columns:56px 1fr 190px 130px 240px;
+    grid-template-columns:50px 1.5fr 140px 120px 100px 100px 80px;
     align-items:center;
     padding:16px 22px;
     border-bottom:1px solid #f3f4f6;
@@ -202,8 +203,9 @@
 /* Purpose pill */
 .lg-purpose {
     display:inline-flex; align-items:center; gap:4px;
-    padding:2px 10px; border-radius:20px;
-    font-size:11.5px; font-weight:600; white-space:nowrap;
+    padding:3px 10px; border-radius:20px;
+    font-size:11px; font-weight:600; white-space:nowrap;
+    flex-shrink:0;
 }
 .pur-delivery    { background:#dbeafe; color:#2563eb; }
 .pur-family      { background:#dcfce7; color:#16a34a; }
@@ -213,20 +215,28 @@
 .pur-other       { background:#f1f5f9; color:#475569; }
 
 /* Host / Apt cell */
+.lg-host-cell { display:flex; flex-direction:column; min-width:0; }
 .lg-host-name { display:block; font-size:13px; font-weight:600; color:#0f172a; margin-bottom:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .lg-host-apt  { display:inline-flex; align-items:center; gap:5px; font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .lg-host-apt i { font-size:10px; color:#94a3b8; }
 
 /* Times cell */
+.lg-times-cell { display:flex; flex-direction:column; gap:4px; min-width:0; }
 .lg-time-row { display:flex; align-items:center; gap:8px; min-width:0; }
-.lg-time-row + .lg-time-row { margin-top:5px; }
+.lg-time-row + .lg-time-row { margin-top:2px; }
 .lg-tlbl { font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; width:24px; flex-shrink:0; }
 .lg-tval      { font-size:13px; font-weight:700; color:#0f172a; font-variant-numeric:tabular-nums; }
 .lg-tval-out  { font-size:13px; font-weight:700; color:#475569; font-variant-numeric:tabular-nums; }
 .lg-tval-dash { font-size:13px; color:#d1d5db; }
 
 /* Status cell */
-.lg-status-cell { display:flex; align-items:center; justify-content:flex-end; gap:7px; }
+.lg-status-cell { display:flex; align-items:center; justify-content:flex-start; gap:7px; flex-wrap:wrap; min-width:0; }
+
+/* Duration cell */
+.lg-duration-cell { display:flex; align-items:center; justify-content:center; min-width:0; }
+
+/* Action cell */
+.lg-action-cell { display:flex; align-items:center; justify-content:flex-end; min-width:0; }
 
 /* Live pill */
 .lg-pill-live {
@@ -314,13 +324,19 @@
 .dark-mode .lg-empty-icon { background:#0f172a; }
 .dark-mode .lg-empty h5 { color:#f1f5f9; }
 
-@media(max-width:960px) {
-    .lg-col-hdr-row,.lg-row { grid-template-columns:44px 1fr 160px 110px auto; }
+@media(max-width:1024px) {
+    .lg-col-hdr-row,.lg-row { grid-template-columns:44px 1.2fr 120px 90px 90px 90px 70px; }
+}
+@media(max-width:768px) {
+    .lg-col-hdr-row { font-size:9px; }
+    .lg-row { grid-template-columns:40px 1.5fr 110px 90px 80px 80px 60px; }
+    .lg-host-cell { display:none; }
+    .lg-duration-cell { display:none; }
 }
 @media(max-width:680px) {
     .lg-col-hdr-row { display:none; }
     .lg-row { grid-template-columns:36px 1fr auto; }
-    .lg-host-cell,.lg-times-cell,.lg-pill-live,.lg-pill-dur { display:none; }
+    .lg-host-cell,.lg-times-cell,.lg-duration-cell,.lg-status-cell { display:none; }
 }
 </style>
 @endpush
@@ -419,10 +435,12 @@
     {{-- Column headers --}}
     <div class="lg-col-hdr-row">
         <span class="lg-col-h">#</span>
-        <span class="lg-col-h">Visitor</span>
+        <span class="lg-col-h">Visitor & Purpose</span>
         <span class="lg-col-h">Host / Apt</span>
         <span class="lg-col-h">Times</span>
-        <span class="lg-col-h right">Status</span>
+        <span class="lg-col-h">Duration</span>
+        <span class="lg-col-h">Status</span>
+        <span class="lg-col-h right">Action</span>
     </div>
 
     @forelse($visits as $i => $visit)
@@ -489,25 +507,38 @@
             </div>
         </div>
 
-        {{-- Status + Action --}}
+        {{-- Duration --}}
+        <div class="lg-duration-cell">
+            <span class="lg-pill-dur">
+                <i class="fas fa-clock" style="font-size:10px;"></i>
+                @if($visit->status === 'active' && $visit->check_in_time)
+                    {{ now()->diffInMinutes($visit->check_in_time) < 60 ? now()->diffInMinutes($visit->check_in_time).'m' : floor(now()->diffInMinutes($visit->check_in_time)/60).'h '.(now()->diffInMinutes($visit->check_in_time)%60).'m' }}
+                @else
+                    {{ $dur ?: '—' }}
+                @endif
+            </span>
+        </div>
+
+        {{-- Status --}}
         <div class="lg-status-cell">
             @if($visit->status === 'active')
-                <span class="lg-pill-live">
-                    <i class="fas fa-clock" style="font-size:10px;"></i> Live
-                </span>
                 <span class="lg-pill-inside">Inside</span>
+            @else
+                <span class="lg-pill-out-done">Out</span>
+            @endif
+        </div>
+
+        {{-- Action --}}
+        <div class="lg-action-cell">
+            @if($visit->status === 'active')
                 <form method="POST" action="{{ route('guard.visits.checkout', $visit) }}"
-                      onsubmit="return confirm('Check out {{ addslashes($visit->visitor->full_name) }}?')" style="margin:0;">
+                      onsubmit="return confirm('Check out {{ addslashes($visit->visitor->full_name) }}?')" style="margin:0; display:inline-flex;">
                     @csrf @method('PATCH')
                     <button class="lg-out-btn">
-                        <i class="fas fa-right-from-bracket" style="font-size:11px;"></i> Out
+                        <i class="fas fa-right-from-bracket" style="font-size:11px;"></i>
                     </button>
                 </form>
             @else
-                <span class="lg-pill-dur">
-                    <i class="fas fa-clock" style="font-size:10px;"></i> {{ $dur ?: '—' }}
-                </span>
-                <span class="lg-pill-out-done">Out</span>
                 <a href="{{ route('guard.visits.show', $visit) }}" class="lg-view-btn" title="View details">
                     <i class="fas fa-eye"></i>
                 </a>

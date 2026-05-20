@@ -11,11 +11,10 @@ class Apartment extends Model
     protected $table = 'apartments';
 
     protected $fillable = [
-       'apartment_number',
+        'apartment_number',
         'block_name',
         'floor_number',
         'status',
-        'notes',
     ];
 
     public function residents()

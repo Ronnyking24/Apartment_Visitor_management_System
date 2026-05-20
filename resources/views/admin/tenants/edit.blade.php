@@ -139,7 +139,7 @@ select.ef-in { cursor:pointer; }
                         <option value="">— Not assigned yet —</option>
                         @foreach($apartments as $apt)
                             <option value="{{ $apt->id }}" {{ old('apartment_id', $tenant->apartment_id)==$apt->id?'selected':'' }}>
-                                {{ $apt->apartment_number }} — {{ $apt->block_name }} ({{ ucfirst($apt->status) }})
+                                {{ $apt->apartment_number }} — {{ $apt->block_name }}@if($apt->id === $tenant->apartment_id) (current)@endif
                             </option>
                         @endforeach
                     </select>

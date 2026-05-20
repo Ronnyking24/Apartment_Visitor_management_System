@@ -8,6 +8,7 @@ use App\Models\Resident;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class TenantController extends Controller
 {
@@ -33,7 +34,7 @@ class TenantController extends Controller
 
     public function create()
     {
-        $apartments = Apartment::where('status', 'vacant')->orWhere('status', 'occupied')->get();
+        $apartments = Apartment::where('status', 'vacant')->get();
         return view('admin.tenants.create', compact('apartments'));
     }
 
@@ -43,7 +44,10 @@ class TenantController extends Controller
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email',
             'password'     => 'required|min:8|confirmed',
-            'apartment_id' => 'required|exists:apartments,id',
+            'apartment_id' => [
+                'required',
+                Rule::exists('apartments', 'id')->where(fn ($q) => $q->where('status', 'vacant')),
+            ],
             'phone'        => 'nullable|string|max:20',
             'national_id'  => 'nullable|string|max:50',
             'gender'       => 'nullable|in:male,female,other',
@@ -78,7 +82,9 @@ class TenantController extends Controller
 
     public function edit(Resident $tenant)
     {
-        $apartments = Apartment::all();
+        $apartments = Apartment::where('status', 'vacant')
+            ->orWhere('id', $tenant->apartment_id)
+            ->get();
         $tenant->load('user');
         return view('admin.tenants.edit', compact('tenant', 'apartments'));
     }
@@ -88,7 +94,15 @@ class TenantController extends Controller
         $validated = $request->validate([
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|unique:users,email,' . $tenant->user_id,
-            'apartment_id' => 'nullable|exists:apartments,id',
+            'apartment_id' => [
+                'nullable',
+                Rule::exists('apartments', 'id')->where(function ($q) use ($tenant, $request) {
+                    if ($request->apartment_id == $tenant->apartment_id) {
+                        return $q;
+                    }
+                    return $q->where('status', 'vacant');
+                }),
+            ],
             'phone'        => 'nullable|string|max:20',
             'national_id'  => 'nullable|string|max:50',
             'gender'       => 'nullable|in:male,female,other',

@@ -40,10 +40,6 @@
                             </select>
                             @error('status')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                        <div class="col-12">
-                            <label class="form-label">Notes</label>
-                            <textarea name="notes" class="form-control" rows="3" placeholder="Optional notes…">{{ old('notes') }}</textarea>
-                        </div>
                         <div class="col-12 d-flex gap-2 justify-content-end pt-2">
                             <a href="{{ route('admin.apartments.index') }}" class="btn btn-outline-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Save Apartment</button>

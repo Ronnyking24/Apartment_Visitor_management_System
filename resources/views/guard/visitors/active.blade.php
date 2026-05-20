@@ -88,11 +88,12 @@
 /* Column header row */
 .av-col-hdr-row {
     display:grid;
-    grid-template-columns:44px minmax(220px,1fr) minmax(160px,0.9fr) 160px 120px 110px 140px;
-    column-gap:14px;
+    grid-template-columns:40px 1.2fr 0.9fr 130px 100px 100px 1fr;
+    column-gap:12px;
     padding:9px 22px;
     background:#fafbfc;
     border-bottom:1px solid #f1f5f9;
+    align-items:center;
 }
 .av-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
 .av-col-h.right { text-align:right; }
@@ -100,8 +101,8 @@
 /* Rows */
 .av-row {
     display:grid;
-    grid-template-columns:44px minmax(220px,1fr) minmax(160px,0.9fr) 160px 120px 110px 140px;
-    column-gap:14px;
+    grid-template-columns:40px 1.2fr 0.9fr 130px 100px 100px 1fr;
+    column-gap:12px;
     align-items:center;
     padding:15px 22px;
     border-bottom:1px solid #f3f4f6;
@@ -134,11 +135,13 @@
 .av-host-apt  { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#64748b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .av-host-apt i { font-size:10px; color:#94a3b8; }
 
-/* Purpose pill */
+/* Purpose cell */
+.av-purpose-cell { display:flex; align-items:center; min-width:0; }
 .av-purpose {
     display:inline-flex; align-items:center; gap:4px;
-    padding:3px 10px; border-radius:20px;
+    padding:4px 11px; border-radius:20px;
     font-size:11.5px; font-weight:600; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis;
 }
 .pur-delivery    { background:#dbeafe; color:#2563eb; }
 .pur-family      { background:#dcfce7; color:#16a34a; }
@@ -148,6 +151,7 @@
 .pur-other       { background:#f1f5f9; color:#475569; }
 
 /* Check-in time */
+.av-checkin-cell { display:flex; flex-direction:column; min-width:0; }
 .av-checkin-time { font-size:13px; font-weight:700; color:#0f172a; font-variant-numeric:tabular-nums; display:block; margin-bottom:2px; }
 .av-checkin-ago  { font-size:11.5px; color:#94a3b8; }
 
@@ -159,6 +163,8 @@
 }
 
 /* Checkout button */
+.av-dur-cell { display:flex; align-items:center; justify-content:center; }
+.av-action-cell { display:flex; align-items:center; justify-content:flex-end; }
 .av-checkout-btn {
     display:inline-flex; align-items:center; gap:5px;
     padding:7px 15px; border-radius:20px;
@@ -198,9 +204,17 @@
 .dark-mode .av-empty h5 { color:#f1f5f9; }
 .dark-mode .av-pagination { border-color:rgba(255,255,255,.07); }
 
-@media(max-width:960px) {
+@media(max-width:1024px) {
     .av-col-hdr-row,
-    .av-row { grid-template-columns:36px 1fr 150px 130px 100px 90px auto; }
+    .av-row { grid-template-columns:36px 1fr 0.8fr 120px 90px 90px auto; }
+}
+@media(max-width:768px) {
+    .av-col-hdr-row { font-size:9px; }
+    .av-row { grid-template-columns:32px 1.5fr 120px 80px auto; }
+    .av-host-cell { display:none; }
+    .av-checkin-cell { display:none; }
+    .av-col-h:nth-child(3),
+    .av-col-h:nth-child(5) { display:none; }
 }
 @media(max-width:680px) {
     .av-col-hdr-row { display:none; }
@@ -324,12 +338,12 @@
         </div>
 
         {{-- Live duration --}}
-        <div>
+        <div class="av-dur-cell">
             <span class="av-dur-timer" data-checkin="{{ $checkinTs }}">{{ $initialDur }}</span>
         </div>
 
         {{-- Action --}}
-        <div style="display:flex;justify-content:flex-end;">
+        <div class="av-action-cell">
             <form method="POST" action="{{ route('guard.visits.checkout', $visit) }}"
                   onsubmit="return confirm('Check out {{ addslashes($visit->visitor->full_name) }}?')"
                   style="margin:0;">

@@ -10,12 +10,12 @@ class ApartmentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Apartment::withCount('residents');
+        $query = Apartment::withCount('residents')->with('activeResident.user');
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                                  $q->where('apartment_number', 'like', "%{$search}%")
+                $q->where('apartment_number', 'like', "%{$search}%")
                   ->orWhere('block_name', 'like', "%{$search}%");
             });
         }
@@ -41,7 +41,6 @@ class ApartmentController extends Controller
             'block_name'       => 'required|string|max:100',
             'floor_number'     => 'required|integer|min:0',
             'status'           => 'required|in:occupied,vacant',
-            'notes'            => 'nullable|string',
         ]);
 
         Apartment::create($validated);
@@ -68,7 +67,6 @@ class ApartmentController extends Controller
             'block_name'       => 'required|string|max:100',
             'floor_number'     => 'required|integer|min:0',
             'status'           => 'required|in:occupied,vacant',
-            'notes'            => 'nullable|string',
         ]);
 
         $apartment->update($validated);

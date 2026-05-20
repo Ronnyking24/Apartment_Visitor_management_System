@@ -35,9 +35,9 @@
 .ai-panel-head { display:flex; align-items:center; justify-content:space-between; padding:15px 22px; border-bottom:1px solid #f1f5f9; }
 .ai-panel-title { font-size:14px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:8px; }
 .ai-meta { font-size:12.5px; color:#94a3b8; }
-.ai-col-hdr { display:grid; grid-template-columns:44px 130px 130px 100px 100px 110px 1fr 110px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
+.ai-col-hdr { display:grid; grid-template-columns:44px 130px 130px 100px 220px 130px 130px; padding:9px 22px; background:#fafbfc; border-bottom:1px solid #f1f5f9; }
 .ai-col-h { font-size:10.5px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.7px; }
-.ai-row { display:grid; grid-template-columns:44px 130px 130px 100px 100px 110px 1fr 110px; align-items:center; padding:13px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
+.ai-row { display:grid; grid-template-columns:44px 130px 130px 100px 220px 130px 130px; align-items:center; padding:13px 22px; border-bottom:1px solid #f3f4f6; transition:background .15s; }
 .ai-row:last-child { border-bottom:none; }
 .ai-row:hover { background:#f8faff; }
 .ai-num { font-size:12.5px; font-weight:700; color:#94a3b8; }
@@ -47,7 +47,6 @@
 .ai-tc { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; background:#eff6ff; color:#1e3a8a; font-size:12px; font-weight:700; }
 .ai-status-occupied { background:#dcfce7; color:#16a34a; display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
 .ai-status-vacant    { background:#f1f5f9; color:#64748b; display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:700; }
-.ai-notes { font-size:12px; color:#94a3b8; }
 .ai-act { display:flex; gap:6px; justify-content:flex-end; }
 .ai-btn-v,.ai-btn-e,.ai-btn-d { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; font-size:12px; border:1.5px solid; cursor:pointer; transition:all .18s; text-decoration:none; }
 .ai-btn-v { background:#f1f5f9; color:#64748b; border-color:#e2e8f0; }
@@ -135,9 +134,8 @@
         <span class="ai-col-h">Apt. No.</span>
         <span class="ai-col-h">Block</span>
         <span class="ai-col-h">Floor</span>
-        <span class="ai-col-h">Tenants</span>
+        <span class="ai-col-h">Resident</span>
         <span class="ai-col-h">Status</span>
-        <span class="ai-col-h">Notes</span>
         <span class="ai-col-h" style="text-align:right;">Actions</span>
     </div>
 
@@ -147,7 +145,13 @@
         <div class="ai-apt-num">{{ $apt->apartment_number }}</div>
         <div class="ai-block">{{ $apt->block_name }}</div>
         <div class="ai-floor"><i class="fas fa-layer-group" style="font-size:10px;color:#94a3b8;margin-right:4px;"></i>Floor {{ $apt->floor_number }}</div>
-        <div><span class="ai-tc"><i class="fas fa-user" style="font-size:9px;"></i>{{ $apt->tenants_count }}</span></div>
+        <div>
+            @if($apt->status === 'occupied')
+                {{ $apt->activeResident?->user->name ?? 'Assigned' }}
+            @else
+                —
+            @endif
+        </div>
         <div>
             @if($apt->status === 'occupied')
                 <span class="ai-status-occupied"><i class="fas fa-check" style="font-size:9px;"></i> Occupied</span>
@@ -155,7 +159,6 @@
                 <span class="ai-status-vacant"><i class="fas fa-minus" style="font-size:9px;"></i> Vacant</span>
             @endif
         </div>
-        <div class="ai-notes">{{ Str::limit($apt->notes ?? '—', 32) }}</div>
         <div class="ai-act">
             <a href="{{ route('admin.apartments.show', $apt) }}" class="ai-btn-v" title="View"><i class="fas fa-eye"></i></a>
             <a href="{{ route('admin.apartments.edit', $apt) }}" class="ai-btn-e" title="Edit"><i class="fas fa-pen"></i></a>

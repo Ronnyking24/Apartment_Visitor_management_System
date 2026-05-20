@@ -41,8 +41,6 @@
 .ap-info-row:last-child { border-bottom:none; }
 .ap-info-key { font-size:11px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; flex-shrink:0; padding-top:1px; }
 .ap-info-val { font-size:13px; color:#0f172a; font-weight:600; text-align:right; }
-.ap-notes-box { margin:12px 20px 16px; background:#f8faff; border:1px solid #dbeafe; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#475569; line-height:1.6; }
-.ap-notes-lbl { font-size:10px; font-weight:800; color:#1e3a8a; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
 
 /* Tenants panel */
 .ap-panel { background:#fff; border-radius:16px; border:1px solid #e8ecf1; box-shadow:0 2px 10px rgba(0,0,0,.05); overflow:hidden; }
@@ -149,13 +147,6 @@
                     <span class="ap-info-val" style="font-size:12px;">{{ $apartment->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
-
-            @if($apartment->notes)
-            <div class="ap-notes-box">
-                <div class="ap-notes-lbl"><i class="fas fa-note-sticky"></i> Notes</div>
-                {{ $apartment->notes }}
-            </div>
-            @endif
         </div>
     </div>
 
